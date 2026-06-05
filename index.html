@@ -463,10 +463,16 @@ async function submitData() {
   prog.style.width = '80%';
 
   try {
+    // GASのCORSプリフライト制限を回避するためform-urlencodedで送信
+    const formData = new URLSearchParams();
+    formData.append('name',     name);
+    formData.append('email',    email);
+    formData.append('chatLog',  conversationLog.join('\n'));
+    formData.append('videoUrl', videoUrl);
+    formData.append('duration', String(duration));
     const res = await fetch(GAS_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, chatLog: conversationLog.join('\n'), videoUrl, duration }),
+      body: formData,
     });
     const result = await res.json().catch(() => ({ status: 'unknown' }));
     if (result.status === 'success') {
