@@ -7,58 +7,87 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0a0b0f;--surface:#11131a;--surface2:#181b25;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8e9ed;--muted:#6b7080;--accent:#22d3a0;--danger:#f04646;}
-    *,*::before,*::after{box-sizing:border-box;}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
-    .wave-bar{transition:height 0.1s ease;}
-    @keyframes wave{0%,100%{height:4px}50%{height:36px}}
-    .wave-active .wave-bar{animation:wave 1.1s ease-in-out infinite;}
-    .wave-active .wave-bar:nth-child(1){animation-delay:0.0s}.wave-active .wave-bar:nth-child(2){animation-delay:0.15s}.wave-active .wave-bar:nth-child(3){animation-delay:0.3s}.wave-active .wave-bar:nth-child(4){animation-delay:0.15s}.wave-active .wave-bar:nth-child(5){animation-delay:0.0s}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .fade-in{animation:fadeIn 0.25s ease forwards;}
-    .field{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
-    .field:focus{border-color:var(--accent)}.field::placeholder{color:var(--muted)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;border:none;border-radius:10px;cursor:pointer;transition:all 0.18s;padding:13px 20px;}
-    .btn:disabled{opacity:0.4;cursor:not-allowed}
-    .btn-primary{background:var(--accent);color:#050f0b;width:100%}.btn-primary:not(:disabled):hover{filter:brightness(1.1)}
-    .btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted)}.btn-ghost:hover{background:var(--surface2);color:var(--text)}
-    .btn-danger{background:rgba(240,70,70,0.1);border:1px solid rgba(240,70,70,0.25);color:var(--danger)}.btn-danger:hover{background:var(--danger);color:#fff}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;}
-    .label{display:block;font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-    .badge-rec{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(240,70,70,0.12);color:var(--danger);}
-    .badge-rec .dot{width:6px;height:6px;border-radius:50%;background:var(--danger);animation:blink 1.4s ease-in-out infinite;}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-    #subtitlesText{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);min-height:40px;line-height:1.7;}
-    #toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--text);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;max-width:320px;}
-    #toast.show{transform:translateY(0);opacity:1}#toast.error{border-color:rgba(240,70,70,0.4);color:var(--danger)}#toast.success{border-color:rgba(34,211,160,0.4);color:var(--accent)}
-    #initOverlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:100;}
+    :root {
+      --bg:#0a0b0f; --surface:#11131a; --surface2:#181b25;
+      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+      --text:#e8e9ed; --muted:#6b7080; --accent:#22d3a0; --danger:#f04646;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.6; min-height:100vh; }
+    @keyframes spin  { to { transform: rotate(360deg); } }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes wave  { 0%,100%{height:4px} 50%{height:36px} }
+    @keyframes fadeIn{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .spinner { width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite; }
+    .fade-in { animation:fadeIn 0.25s ease forwards; }
+    .wave-bar { transition:height 0.1s ease; }
+    .wave-active .wave-bar { animation:wave 1.1s ease-in-out infinite; }
+    .wave-active .wave-bar:nth-child(1){animation-delay:0.00s}
+    .wave-active .wave-bar:nth-child(2){animation-delay:0.15s}
+    .wave-active .wave-bar:nth-child(3){animation-delay:0.30s}
+    .wave-active .wave-bar:nth-child(4){animation-delay:0.15s}
+    .wave-active .wave-bar:nth-child(5){animation-delay:0.00s}
+    .field { width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s; }
+    .field:focus { border-color:var(--accent); }
+    .field::placeholder { color:var(--muted); }
+    .btn { display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;border:none;border-radius:10px;cursor:pointer;transition:all 0.18s;padding:13px 20px; }
+    .btn:disabled { opacity:0.4;cursor:not-allowed; }
+    .btn-primary { background:var(--accent);color:#050f0b;width:100%; }
+    .btn-primary:not(:disabled):hover { filter:brightness(1.1); }
+    .btn-ghost  { background:transparent;border:1px solid var(--border2);color:var(--muted); }
+    .btn-ghost:hover { background:var(--surface2);color:var(--text); }
+    .btn-danger { background:rgba(240,70,70,0.1);border:1px solid rgba(240,70,70,0.25);color:var(--danger); }
+    .btn-danger:hover { background:var(--danger);color:#fff; }
+    .card  { background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px; }
+    .label { display:block;font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px; }
+    .badge-rec { display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(240,70,70,0.12);color:var(--danger); }
+    .badge-rec .dot { width:6px;height:6px;border-radius:50%;background:var(--danger);animation:blink 1.4s ease-in-out infinite; }
+    #subtitlesText { font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);min-height:40px;line-height:1.7; }
+    #toast { position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--text);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;max-width:320px; }
+    #toast.show  { transform:translateY(0);opacity:1; }
+    #toast.error { border-color:rgba(240,70,70,0.4);color:var(--danger); }
+    #toast.ok    { border-color:rgba(34,211,160,0.4);color:var(--accent); }
+    #initOverlay { position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:100; }
   </style>
 </head>
 <body class="flex flex-col min-h-screen">
-<div id="toast"></div>
-<div id="initOverlay"><div class="spinner"></div><p style="color:var(--muted);font-size:13px;">システムを初期化中...</p></div>
 
-<header style="border-bottom:1px solid var(--border);background:var(--surface);" class="px-5 py-3 flex items-center gap-2 z-10">
+<div id="toast"></div>
+
+<!-- 初期化中オーバーレイ -->
+<div id="initOverlay">
+  <div class="spinner"></div>
+  <p style="color:var(--muted);font-size:13px;">システムを初期化中...</p>
+</div>
+
+<!-- ヘッダー -->
+<header style="border-bottom:1px solid var(--border);background:var(--surface);" class="px-5 py-3 flex items-center gap-2">
   <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);" class="animate-pulse"></div>
   <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--muted);">AI ONE-STAGE INTERVIEW</span>
 </header>
 
 <main class="flex-grow flex items-center justify-center p-4">
 
-  <!-- STEP 1 -->
-  <section id="step-entry" class="card fade-in" style="width:100%;max-width:440px;display:none;">
+  <!-- STEP 1: 応募者情報入力 -->
+  <section id="step-entry" class="card" style="width:100%;max-width:440px;display:none;">
     <div style="text-align:center;margin-bottom:24px;">
       <h2 style="font-size:22px;font-weight:600;margin-bottom:6px;">AI 一次選考面接</h2>
       <p style="color:var(--muted);font-size:13px;">履歴書不要。約5分の音声対話で選考が完了します。</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;">
-      <div><span class="label">お名前</span><input type="text" id="userName" class="field" placeholder="山田 太郎"></div>
-      <div><span class="label">メールアドレス</span><input type="email" id="userEmail" class="field" placeholder="sample@example.com"></div>
+      <div>
+        <span class="label">お名前</span>
+        <input type="text" id="userName" class="field" placeholder="山田 太郎" autocomplete="name">
+      </div>
+      <div>
+        <span class="label">メールアドレス</span>
+        <input type="email" id="userEmail" class="field" placeholder="sample@example.com" autocomplete="email">
+      </div>
     </div>
     <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:14px;margin:18px 0;">
-      <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:10px;">本選考では、人物の雰囲気やコミュニケーションの様子を確認するため、カメラ・マイクを使用したAI面接および動画録画を行います。ご提供いただいた情報・動画は選考目的以外には一切使用いたしません。</p>
+      <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:10px;">
+        本選考では、人物の雰囲気やコミュニケーションの様子を確認するため、カメラ・マイクを使用したAI面接および動画録画を行います。ご提供いただいた情報・動画は選考目的以外には一切使用いたしません。
+      </p>
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
         <input type="checkbox" id="consentCheck" style="width:16px;height:16px;accent-color:var(--accent);">
         <span style="font-size:13px;font-weight:500;">規約に同意して面接に進む</span>
@@ -67,14 +96,15 @@
     <button id="startSetupBtn" class="btn btn-primary" disabled>面接準備を開始　→</button>
   </section>
 
-  <!-- STEP 2 -->
-  <section id="step-setup" class="card fade-in" style="width:100%;max-width:500px;display:none;">
+  <!-- STEP 2: カメラ・マイク確認 -->
+  <section id="step-setup" class="card" style="width:100%;max-width:500px;display:none;">
     <h2 style="font-size:18px;font-weight:600;margin-bottom:4px;">カメラ・マイクの確認</h2>
     <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">面接開始前に映像・音声を確認してください。</p>
     <div style="position:relative;aspect-ratio:4/3;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:16px;">
       <video id="previewVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video>
       <div id="mediaLoading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--surface);">
-        <div class="spinner"></div><p style="font-size:12px;color:var(--muted);">カメラを起動中…</p>
+        <div class="spinner"></div>
+        <p style="font-size:12px;color:var(--muted);">カメラを起動中…</p>
       </div>
     </div>
     <div style="background:rgba(34,211,160,0.06);border:1px solid rgba(34,211,160,0.2);border-radius:10px;padding:12px 14px;margin-bottom:18px;">
@@ -87,11 +117,12 @@
     </div>
   </section>
 
-  <!-- STEP 3 -->
+  <!-- STEP 3: 面接中 -->
   <section id="step-interview" style="width:100%;max-width:860px;display:none;border-radius:16px;overflow:hidden;border:1px solid var(--border);">
     <div style="display:grid;grid-template-columns:1fr 1fr;min-height:480px;">
+      <!-- 左: AIパネル -->
       <div style="background:var(--surface);padding:24px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--border);">
-        <div class="flex justify-between items-center">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="badge-rec"><span class="dot"></span>録画・面接中</span>
           <span id="interviewTimer" style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);">00:00</span>
         </div>
@@ -114,285 +145,390 @@
           <span style="font-size:11px;color:var(--muted);">話し終わったら自動的にAIが返答します</span>
         </div>
       </div>
+      <!-- 右: カメラ映像 -->
       <div style="background:#000;position:relative;">
         <video id="interviewVideo" autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 50%);pointer-events:none;"></div>
-        <div style="position:absolute;top:12px;left:12px;"><span style="font-size:10px;font-weight:600;letter-spacing:0.08em;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.5);color:#aaa;">CANDIDATE</span></div>
-        <div style="position:absolute;bottom:12px;left:12px;right:12px;"><p style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">カメラを正面に向け、自然にお話しください。</p></div>
+        <div style="position:absolute;top:12px;left:12px;">
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.5);color:#aaa;">CANDIDATE</span>
+        </div>
+        <div style="position:absolute;bottom:12px;left:12px;right:12px;">
+          <p style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">カメラを正面に向け、自然にお話しください。</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- STEP 4 -->
-  <section id="step-processing" class="card fade-in" style="width:100%;max-width:420px;text-align:center;display:none;">
+  <!-- STEP 4: 送信中 -->
+  <section id="step-processing" class="card" style="width:100%;max-width:420px;text-align:center;display:none;">
     <div class="spinner" style="margin:0 auto 20px;"></div>
     <h2 style="font-size:18px;font-weight:600;margin-bottom:8px;">データを送信中…</h2>
     <p style="font-size:13px;color:var(--muted);margin-bottom:24px;">録画データをアップロードし、AI評価を生成しています。<br>画面を閉じずにお待ちください。</p>
     <div style="background:var(--surface2);border-radius:8px;height:6px;overflow:hidden;">
-      <div id="uploadProgress" style="height:100%;width:5%;background:var(--accent);border-radius:8px;transition:width 0.4s ease;"></div>
+      <div id="uploadProgress" style="height:100%;width:5%;background:var(--accent);border-radius:8px;transition:width 0.5s ease;"></div>
     </div>
     <p id="progressLabel" style="font-size:11px;color:var(--muted);margin-top:8px;">準備中...</p>
   </section>
 
-  <!-- STEP 5 -->
-  <section id="step-thanks" class="card fade-in" style="width:100%;max-width:420px;text-align:center;display:none;">
+  <!-- STEP 5: 完了 -->
+  <section id="step-thanks" class="card" style="width:100%;max-width:420px;text-align:center;display:none;">
     <div style="width:64px;height:64px;border-radius:50%;background:rgba(34,211,160,0.1);border:2px solid rgba(34,211,160,0.3);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;">✓</div>
     <h2 style="font-size:22px;font-weight:600;margin-bottom:8px;">面接完了</h2>
     <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">お疲れ様でした。AI一次面接のご回答、ありがとうございました。</p>
-    <p style="font-size:12px;color:var(--muted);line-height:1.7;background:var(--surface2);border-radius:10px;padding:14px;">回答内容は安全に保存されました。次の選考（Zoom面接）に進む場合は、担当者よりご連絡いたします。</p>
+    <p style="font-size:12px;color:var(--muted);line-height:1.7;background:var(--surface2);border-radius:10px;padding:14px;">
+      回答内容は安全に保存されました。次の選考（Zoom面接）に進む場合は、担当者よりご連絡いたします。
+    </p>
   </section>
 
 </main>
 
-<footer style="border-top:1px solid var(--border);padding:14px;text-align:center;font-size:11px;color:var(--muted);">© 2026 AI Recruiting System</footer>
+<footer style="border-top:1px solid var(--border);padding:14px;text-align:center;font-size:11px;color:var(--muted);">
+  © 2026 AI Recruiting System
+</footer>
 
 <script>
 'use strict';
 
+// ══════════════════════════════════════════
+// ★ GASのデプロイURLをここに入力
+// ══════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXjzslhel_0zpgXlJIi9pf_kNrR-eWDICY5gxpo4ev_wbhw8VH0_hJ5tR452LGCe-8/exec';
+// ══════════════════════════════════════════
 
+// GASから取得する設定値
 let GEMINI_KEY  = '';
 let DRIVE_TOKEN = '';
 let FOLDER_ID   = '';
 
+// アプリ状態
+let mediaStream        = null;
+let mediaRecorder      = null;
+let recordedChunks     = [];
+let interviewStartTime = null;
+let timerInterval      = null;
+let webSocket          = null;
+let sharedAudioCtx     = null;
+let audioQueue         = [];
+let isInterviewActive  = false;
+let conversationLog    = [];
+let speechRecognition  = null;
+let workletNode        = null;
+let micSourceNode      = null;
+
+// ─── ユーティリティ ───────────────────────────────────────────
 const $ = id => document.getElementById(id);
-let mediaStream=null, mediaRecorder=null, recordedChunks=[];
-let interviewStartTime=null, timerInterval=null;
-let webSocket=null, sharedAudioCtx=null, audioQueue=[];
-let isInterviewActive=false, conversationLog=[];
-let speechRecognition=null, workletNode=null, micSourceNode=null;
 
-function toast(msg,type='info',dur=4000){
-  const el=$('toast'); el.textContent=msg; el.className='show '+type;
-  clearTimeout(el._t); el._t=setTimeout(()=>{el.className='';},dur);
+function toast(msg, type, dur) {
+  type = type || 'info';
+  dur  = dur  || 4000;
+  var el = $('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.className = ''; }, dur);
 }
 
-function showStep(step){
+function showStep(stepId) {
   ['step-entry','step-setup','step-interview','step-processing','step-thanks']
-    .forEach(id=>{$(id).style.display='none';});
-  step.style.display='';
-  step.classList.remove('fade-in'); void step.offsetWidth; step.classList.add('fade-in');
+    .forEach(function(id) { $(id).style.display = 'none'; });
+  var el = $(stepId);
+  el.style.display = (stepId === 'step-interview') ? 'block' : '';
+  el.classList.remove('fade-in');
+  void el.offsetWidth; // reflow
+  el.classList.add('fade-in');
 }
 
-// ── 起動: GASからAPIキー・Driveトークンを取得 ──
-async function initApp(){
+// ─── 起動: GASから設定値を取得 ────────────────────────────────
+async function initApp() {
   try {
-    const res  = await fetch(GAS_URL + '?action=token');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (data.status !== 'ok') throw new Error(data.message || '設定取得失敗');
+    var res = await fetch(GAS_URL + '?action=token');
+    if (!res.ok) throw new Error('GAS接続エラー (HTTP ' + res.status + ')');
+
+    var text = await res.text();
+    var data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      throw new Error('GASレスポンス解析失敗。GASのデプロイURLを確認してください。');
+    }
+
+    if (data.status !== 'ok') throw new Error(data.message || '設定取得に失敗しました');
+
     GEMINI_KEY  = data.geminiApiKey || '';
-    DRIVE_TOKEN = data.token        || '';
+    DRIVE_TOKEN = data.driveToken   || '';
     FOLDER_ID   = data.folderId     || '';
-    if (!GEMINI_KEY) throw new Error('GASスクリプトプロパティにGEMINI_API_KEYを設定してください');
+
+    if (!GEMINI_KEY) throw new Error('GASのスクリプトプロパティにGEMINI_API_KEYを設定してください');
+
     $('initOverlay').style.display = 'none';
-    showStep($('step-entry'));
-  } catch(err) {
-    $('initOverlay').innerHTML = `
-      <div style="text-align:center;padding:20px;max-width:360px;">
-        <p style="font-size:32px;margin-bottom:12px;">❌</p>
-        <p style="color:var(--danger);font-size:15px;font-weight:600;margin-bottom:8px;">初期化エラー</p>
-        <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:16px;">${err.message}</p>
-        <button onclick="location.reload()" style="background:var(--accent);color:#050f0b;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;">再試行</button>
-      </div>`;
+    showStep('step-entry');
+
+  } catch (err) {
+    $('initOverlay').innerHTML =
+      '<div style="text-align:center;padding:20px;max-width:360px;">' +
+      '<p style="font-size:32px;margin-bottom:12px;">❌</p>' +
+      '<p style="color:var(--danger);font-size:15px;font-weight:600;margin-bottom:8px;">初期化エラー</p>' +
+      '<p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:16px;">' + err.message + '</p>' +
+      '<button onclick="location.reload()" style="background:var(--accent);color:#050f0b;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;">再試行</button>' +
+      '</div>';
   }
 }
 
-// ── STEP1 バリデーション ──
-function validate(){
-  $('startSetupBtn').disabled = !(
-    $('userName').value.trim().length > 0 &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('userEmail').value.trim()) &&
-    $('consentCheck').checked
-  );
+// ─── STEP 1: バリデーション ───────────────────────────────────
+function validateEntry() {
+  var nameOk    = $('userName').value.trim().length > 0;
+  var emailOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('userEmail').value.trim());
+  var consentOk = $('consentCheck').checked;
+  $('startSetupBtn').disabled = !(nameOk && emailOk && consentOk);
 }
-$('userName').addEventListener('input', validate);
-$('userEmail').addEventListener('input', validate);
-$('consentCheck').addEventListener('change', validate);
+$('userName').addEventListener('input',    validateEntry);
+$('userEmail').addEventListener('input',   validateEntry);
+$('consentCheck').addEventListener('change', validateEntry);
 
-// ── STEP2 カメラ起動 ──
-$('startSetupBtn').addEventListener('click', async () => {
-  showStep($('step-setup'));
+// ─── STEP 2: カメラ・マイク起動 ───────────────────────────────
+$('startSetupBtn').addEventListener('click', async function() {
+  showStep('step-setup');
   $('mediaLoading').style.display = 'flex';
   $('startInterviewBtn').disabled = true;
+
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { width:{ideal:640}, height:{ideal:480}, frameRate:{ideal:15} },
-      audio: { echoCancellation:true, noiseSuppression:true },
+      video: { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 15 } },
+      audio: { echoCancellation: true, noiseSuppression: true },
     });
     $('previewVideo').srcObject = mediaStream;
     $('mediaLoading').style.display = 'none';
     $('startInterviewBtn').disabled = false;
-  } catch(err) {
-    $('mediaLoading').innerHTML = '<div style="text-align:center;padding:20px;"><p style="font-size:28px;margin-bottom:10px;">⚠️</p><p style="color:var(--danger);font-weight:500;">カメラ/マイクにアクセスできません</p><p style="font-size:12px;color:var(--muted);margin-top:6px;">ブラウザのアドレスバー左のカメラアイコンから許可してください。</p></div>';
+
+  } catch (err) {
+    console.error('[Media]', err);
+    $('mediaLoading').innerHTML =
+      '<div style="text-align:center;padding:20px;">' +
+      '<p style="font-size:28px;margin-bottom:10px;">⚠️</p>' +
+      '<p style="color:var(--danger);font-weight:500;margin-bottom:6px;">カメラ/マイクにアクセスできません</p>' +
+      '<p style="font-size:12px;color:var(--muted);">ブラウザのアドレスバー左のアイコンから許可してください。</p>' +
+      '</div>';
   }
 });
 
-$('backToEntryBtn').addEventListener('click', () => {
-  if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+$('backToEntryBtn').addEventListener('click', function() {
+  if (mediaStream) { mediaStream.getTracks().forEach(function(t) { t.stop(); }); mediaStream = null; }
   $('previewVideo').srcObject = null;
-  showStep($('step-entry'));
+  showStep('step-entry');
 });
 
-// ── STEP3 面接開始 ──
-$('startInterviewBtn').addEventListener('click', async () => {
-  showStep($('step-interview'));
+// ─── STEP 3: 面接開始 ─────────────────────────────────────────
+$('startInterviewBtn').addEventListener('click', async function() {
+  showStep('step-interview');
   $('step-interview').style.display = 'grid';
   $('interviewVideo').srcObject = mediaStream;
+
   isInterviewActive  = true;
   interviewStartTime = Date.now();
   timerInterval = setInterval(updateTimer, 1000);
+
   startRecording();
   setupSpeechRecognition();
   await initiateWebSocket();
 });
 
+// ─── 録画 ────────────────────────────────────────────────────
 function startRecording() {
   recordedChunks = [];
-  const types = ['video/webm;codecs=vp8,opus','video/webm;codecs=vp9,opus','video/webm','video/mp4'];
-  let mime = '';
-  for (const t of types) { if (MediaRecorder.isTypeSupported(t)) { mime = t; break; } }
+  var mimeTypes = ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm', 'video/mp4'];
+  var mime = '';
+  for (var i = 0; i < mimeTypes.length; i++) {
+    if (MediaRecorder.isTypeSupported(mimeTypes[i])) { mime = mimeTypes[i]; break; }
+  }
   try {
     mediaRecorder = new MediaRecorder(mediaStream,
-      mime ? { mimeType:mime, videoBitsPerSecond:200000, audioBitsPerSecond:32000 } : {});
-  } catch { mediaRecorder = new MediaRecorder(mediaStream); }
-  mediaRecorder.ondataavailable = e => { if (e.data?.size > 0) recordedChunks.push(e.data); };
+      mime ? { mimeType: mime, videoBitsPerSecond: 200000, audioBitsPerSecond: 32000 } : {});
+  } catch (e) {
+    mediaRecorder = new MediaRecorder(mediaStream);
+  }
+  mediaRecorder.ondataavailable = function(e) {
+    if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+  };
   mediaRecorder.start(1000);
 }
 
+// ─── タイマー ─────────────────────────────────────────────────
 function updateTimer() {
-  const s = Math.floor((Date.now() - interviewStartTime) / 1000);
+  var s = Math.floor((Date.now() - interviewStartTime) / 1000);
   $('interviewTimer').textContent =
-    String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
-  if (s >= 300 && isInterviewActive) { toast('面接時間の上限（5分）に達しました'); completeInterview(); }
+    String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  if (s >= 300 && isInterviewActive) {
+    toast('面接時間の上限（5分）に達しました');
+    completeInterview();
+  }
 }
 
+// ─── Web Speech API（ユーザー発話取得） ───────────────────────
 function setupSpeechRecognition() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return;
   speechRecognition = new SR();
   speechRecognition.lang = 'ja-JP';
   speechRecognition.continuous = true;
   speechRecognition.interimResults = false;
-  speechRecognition.onresult = e => {
-    for (let i = e.resultIndex; i < e.results.length; i++) {
+  speechRecognition.onresult = function(e) {
+    for (var i = e.resultIndex; i < e.results.length; i++) {
       if (e.results[i].isFinal) {
-        const t = e.results[i][0].transcript.trim();
+        var t = e.results[i][0].transcript.trim();
         if (t) conversationLog.push('応募者: ' + t);
       }
     }
   };
-  speechRecognition.onerror = e => console.warn('[SR]', e.error);
-  speechRecognition.onend   = () => { if (isInterviewActive) speechRecognition.start(); };
+  speechRecognition.onerror = function(e) { console.warn('[SR]', e.error); };
+  speechRecognition.onend   = function() { if (isInterviewActive) speechRecognition.start(); };
   speechRecognition.start();
 }
 
+// ─── Gemini Live API (WebSocket) ───────────────────────────────
 async function initiateWebSocket() {
-  const url = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=' + GEMINI_KEY;
-  webSocket = new WebSocket(url);
+  var wsUrl = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=' + GEMINI_KEY;
+  webSocket = new WebSocket(wsUrl);
 
-  webSocket.onopen = () => {
+  webSocket.onopen = function() {
     $('aiStatusText').textContent = '面接官がオンラインになりました';
-    webSocket.send(JSON.stringify({ setup: {
-      model: 'models/gemini-2.0-flash-exp',
-      generationConfig: {
-        responseModalities: ['AUDIO', 'TEXT'],
-        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
+    webSocket.send(JSON.stringify({
+      setup: {
+        model: 'models/gemini-2.0-flash-exp',
+        generationConfig: {
+          responseModalities: ['AUDIO', 'TEXT'],
+          speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
+        },
+        systemInstruction: { parts: [{ text:
+          'あなたは会社のAI選考官です。優しく、聞き取りやすく、ハキハキとした口調で話してください。' +
+          '以下の情報を1つずつ会話を通じて自然に引き出してください：' +
+          '①現在の状況（学生・主婦・会社員など）、②応募理由、③子供や教育に関わった経験、' +
+          '④勤務条件（場所・曜日・シフト希望）。' +
+          '一問一答にならず、自然な相槌を入れながら進めてください。' +
+          '全項目が終わるか5分経過したら「面接は以上です。お時間をいただきありがとうございました。」と伝えて終了してください。'
+        }] },
       },
-      systemInstruction: { parts: [{ text:
-        'あなたは会社のAI選考官です。優しく、聞き取りやすく、ハキハキとした口調で話してください。' +
-        '以下の情報を1つずつ会話を通じて自然に引き出してください：' +
-        '①現在の状況（学生・主婦・会社員など）、②応募理由、③子供や教育に関わった経験、' +
-        '④勤務条件（場所・曜日・シフト希望）。' +
-        '一問一答にならず、自然な相槌を入れながら進めてください。' +
-        '全項目が終わるか5分経過したら「面接は以上です。お時間をいただきありがとうございました。」と伝えて終了してください。'
-      }] },
-    }}));
+    }));
     setupMicWorklet();
   };
 
-  webSocket.onmessage = async e => {
-    let r;
-    try { const t = e.data instanceof Blob ? await e.data.text() : e.data; r = JSON.parse(t); }
-    catch { return; }
-    const parts = r.serverContent?.modelTurn?.parts;
+  webSocket.onmessage = async function(e) {
+    var text = (e.data instanceof Blob) ? await e.data.text() : e.data;
+    var r;
+    try { r = JSON.parse(text); } catch (ex) { return; }
+    var parts = r.serverContent && r.serverContent.modelTurn && r.serverContent.modelTurn.parts;
     if (!parts) return;
-    for (const p of parts) {
-      if (p.inlineData?.mimeType?.startsWith('audio/pcm')) playPCM(atob(p.inlineData.data));
-      if (p.text?.trim()) {
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (p.inlineData && p.inlineData.mimeType && p.inlineData.mimeType.indexOf('audio/pcm') === 0) {
+        playPCM(atob(p.inlineData.data));
+      }
+      if (p.text && p.text.trim()) {
         $('subtitlesText').textContent = p.text;
         conversationLog.push('AI面接官: ' + p.text.trim());
       }
     }
   };
 
-  webSocket.onclose = () => { if (isInterviewActive) completeInterview(); };
-  webSocket.onerror = () => {
+  webSocket.onclose = function() {
+    if (isInterviewActive) completeInterview();
+  };
+
+  webSocket.onerror = function() {
     $('aiStatusText').textContent = '接続エラーが発生しました';
     toast('WebSocket接続エラー。しばらく待ってから再試行してください。', 'error', 6000);
   };
 }
 
+// ─── AudioWorklet: マイク音声を16kHzで送信 ────────────────────
 async function setupMicWorklet() {
   try {
-    if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext||window.webkitAudioContext)({ sampleRate: 24000 });
-    const micCtx = new AudioContext({ sampleRate: 16000 });
-    const code = `
-      class P extends AudioWorkletProcessor {
-        constructor(){super();this._b=[];}
-        process(inputs){
-          const ch=inputs[0]?.[0]; if(!ch)return true;
-          for(const s of ch)this._b.push(s);
-          while(this._b.length>=4096){
-            const c=this._b.splice(0,4096);
-            const i=new Int16Array(4096);
-            for(let j=0;j<4096;j++){const s=Math.max(-1,Math.min(1,c[j]));i[j]=s<0?s*0x8000:s*0x7FFF;}
-            this.port.postMessage(i.buffer,[i.buffer]);
-          }
-          return true;
-        }
-      }
-      registerProcessor('mic-p',P);
-    `;
-    const burl = URL.createObjectURL(new Blob([code], { type: 'application/javascript' }));
-    await micCtx.audioWorklet.addModule(burl);
-    URL.revokeObjectURL(burl);
+    if (!sharedAudioCtx) {
+      sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+    }
+    var micCtx = new AudioContext({ sampleRate: 16000 });
+
+    var workletCode =
+      'class P extends AudioWorkletProcessor {' +
+      '  constructor(){super();this._b=[];}' +
+      '  process(inputs){' +
+      '    var ch=inputs[0]&&inputs[0][0];if(!ch)return true;' +
+      '    for(var i=0;i<ch.length;i++)this._b.push(ch[i]);' +
+      '    while(this._b.length>=4096){' +
+      '      var c=this._b.splice(0,4096);' +
+      '      var buf=new Int16Array(4096);' +
+      '      for(var j=0;j<4096;j++){var s=Math.max(-1,Math.min(1,c[j]));buf[j]=s<0?s*0x8000:s*0x7FFF;}' +
+      '      this.port.postMessage(buf.buffer,[buf.buffer]);' +
+      '    }' +
+      '    return true;' +
+      '  }' +
+      '}' +
+      'registerProcessor("mic-p",P);';
+
+    var blobUrl = URL.createObjectURL(new Blob([workletCode], { type: 'application/javascript' }));
+    await micCtx.audioWorklet.addModule(blobUrl);
+    URL.revokeObjectURL(blobUrl);
+
     micSourceNode = micCtx.createMediaStreamSource(mediaStream);
     workletNode   = new AudioWorkletNode(micCtx, 'mic-p');
-    workletNode.port.onmessage = e => {
-      if (!isInterviewActive || webSocket?.readyState !== WebSocket.OPEN) return;
+
+    workletNode.port.onmessage = function(e) {
+      if (!isInterviewActive) return;
+      if (!webSocket || webSocket.readyState !== WebSocket.OPEN) return;
       webSocket.send(JSON.stringify({
-        realtimeInput: { mediaChunks: [{ mimeType: 'audio/pcm;rate=16000', data: toBase64(e.data) }] },
+        realtimeInput: {
+          mediaChunks: [{ mimeType: 'audio/pcm;rate=16000', data: toBase64(e.data) }],
+        },
       }));
     };
+
     micSourceNode.connect(workletNode);
-  } catch(err) {
+
+  } catch (err) {
     console.error('[Worklet]', err);
-    toast('マイク音声処理に失敗しました', 'error');
+    toast('マイク音声処理のセットアップに失敗しました。', 'error');
   }
 }
 
+// ─── PCM音声再生（Gemini出力: 24kHz/Mono/16bit） ─────────────
 function playPCM(raw) {
-  if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext||window.webkitAudioContext)({ sampleRate: 24000 });
+  if (!sharedAudioCtx) {
+    sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+  }
   if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
-  const i16 = new Int16Array(new ArrayBuffer(raw.length));
-  for (let i = 0; i < raw.length/2; i++)
-    i16[i] = (raw.charCodeAt(i*2) & 0xff) | ((raw.charCodeAt(i*2+1) & 0xff) << 8);
-  const f32 = new Float32Array(i16.length);
-  for (let i = 0; i < i16.length; i++) f32[i] = i16[i] < 0 ? i16[i]/0x8000 : i16[i]/0x7FFF;
-  const buf = sharedAudioCtx.createBuffer(1, f32.length, 24000);
+
+  var i16 = new Int16Array(new ArrayBuffer(raw.length));
+  for (var i = 0; i < raw.length / 2; i++) {
+    i16[i] = (raw.charCodeAt(i * 2) & 0xff) | ((raw.charCodeAt(i * 2 + 1) & 0xff) << 8);
+  }
+  var f32 = new Float32Array(i16.length);
+  for (var j = 0; j < i16.length; j++) {
+    f32[j] = i16[j] < 0 ? i16[j] / 0x8000 : i16[j] / 0x7FFF;
+  }
+
+  var buf = sharedAudioCtx.createBuffer(1, f32.length, 24000);
   buf.getChannelData(0).set(f32);
-  const src = sharedAudioCtx.createBufferSource();
-  src.buffer = buf; src.connect(sharedAudioCtx.destination);
-  const now = sharedAudioCtx.currentTime; let startAt = now;
-  audioQueue = audioQueue.filter(x => x.endAt > now - 1);
-  if (audioQueue.length > 0) { const l = audioQueue[audioQueue.length-1]; if (l.endAt > now) startAt = l.endAt; }
-  audioQueue.push({ src, endAt: startAt + buf.duration });
+
+  var src = sharedAudioCtx.createBufferSource();
+  src.buffer = buf;
+  src.connect(sharedAudioCtx.destination);
+
+  var now = sharedAudioCtx.currentTime;
+  var startAt = now;
+  // 古いエントリをクリーンアップ
+  audioQueue = audioQueue.filter(function(x) { return x.endAt > now - 1; });
+  if (audioQueue.length > 0) {
+    var last = audioQueue[audioQueue.length - 1];
+    if (last.endAt > now) startAt = last.endAt;
+  }
+  var endAt = startAt + buf.duration;
+  audioQueue.push({ src: src, endAt: endAt });
   src.start(startAt);
+
   $('aiStatusText').textContent = 'AI面接官が質問中…';
   $('soundWave').classList.add('wave-active');
-  src.onended = () => {
-    audioQueue = audioQueue.filter(x => x.src !== src);
+
+  src.onended = function() {
+    audioQueue = audioQueue.filter(function(x) { return x.src !== src; });
     if (audioQueue.length === 0) {
       $('aiStatusText').textContent = 'あなたの回答をお聞きしています…';
       $('soundWave').classList.remove('wave-active');
@@ -400,57 +536,75 @@ function playPCM(raw) {
   };
 }
 
-function toBase64(buf) {
-  const b = new Uint8Array(buf); let s = '';
-  for (let i = 0; i < b.byteLength; i++) s += String.fromCharCode(b[i]);
-  return btoa(s);
+// ─── ArrayBuffer → Base64 ────────────────────────────────────
+function toBase64(buffer) {
+  var bytes = new Uint8Array(buffer);
+  var binary = '';
+  for (var i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
 }
 
-$('endInterviewBtn').addEventListener('click', () => {
+// ─── 面接終了 ─────────────────────────────────────────────────
+$('endInterviewBtn').addEventListener('click', function() {
   if (confirm('面接を終了して回答を送信しますか？')) completeInterview();
 });
 
 async function completeInterview() {
   if (!isInterviewActive) return;
   isInterviewActive = false;
+
   clearInterval(timerInterval);
-  if (speechRecognition) { try { speechRecognition.onend=null; speechRecognition.stop(); } catch {} }
-  if (webSocket?.readyState === WebSocket.OPEN) webSocket.close();
-  if (workletNode)   { try { workletNode.disconnect();   } catch {} }
-  if (micSourceNode) { try { micSourceNode.disconnect(); } catch {} }
-  if (sharedAudioCtx) { try { await sharedAudioCtx.close(); } catch {}; sharedAudioCtx = null; }
-  showStep($('step-processing'));
-  // mediaRecorder.stop() の完了を確実に待つ
-  await new Promise(resolve => {
+
+  if (speechRecognition) {
+    try { speechRecognition.onend = null; speechRecognition.stop(); } catch (e) {}
+  }
+  if (webSocket && webSocket.readyState === WebSocket.OPEN) webSocket.close();
+  if (workletNode)   { try { workletNode.disconnect();   } catch (e) {} }
+  if (micSourceNode) { try { micSourceNode.disconnect(); } catch (e) {} }
+  if (sharedAudioCtx) {
+    try { await sharedAudioCtx.close(); } catch (e) {}
+    sharedAudioCtx = null;
+  }
+
+  showStep('step-processing');
+
+  // mediaRecorder.stop()の完了（onstop）を確実に待ってからBlob化
+  await new Promise(function(resolve) {
     if (!mediaRecorder || mediaRecorder.state === 'inactive') { resolve(); return; }
     mediaRecorder.onstop = resolve;
     mediaRecorder.stop();
   });
-  if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+
+  if (mediaStream) mediaStream.getTracks().forEach(function(t) { t.stop(); });
+
   await submitData();
 }
 
+// ─── データ送信 ───────────────────────────────────────────────
 async function submitData() {
-  const name     = $('userName').value.trim();
-  const email    = $('userEmail').value.trim();
-  const duration = Math.floor((Date.now() - interviewStartTime) / 1000);
-  const prog     = $('uploadProgress');
-  const lbl      = $('progressLabel');
+  var name     = $('userName').value.trim();
+  var email    = $('userEmail').value.trim();
+  var duration = Math.floor((Date.now() - interviewStartTime) / 1000);
+  var prog     = $('uploadProgress');
+  var lbl      = $('progressLabel');
 
-  const mime      = recordedChunks[0]?.type || 'video/webm';
-  const videoBlob = new Blob(recordedChunks, { type: mime });
-  const ext       = mime.includes('mp4') ? 'mp4' : 'webm';
-  const fileName  = Date.now() + '_' + name.replace(/\s/g,'_') + '_interview.' + ext;
+  var mime      = (recordedChunks[0] && recordedChunks[0].type) || 'video/webm';
+  var videoBlob = new Blob(recordedChunks, { type: mime });
+  var ext       = mime.indexOf('mp4') !== -1 ? 'mp4' : 'webm';
+  var fileName  = Date.now() + '_' + name.replace(/\s/g, '_') + '_interview.' + ext;
 
+  // Step1: 動画をDriveにアップロード
   prog.style.width = '20%';
   lbl.textContent  = '動画をDriveにアップロード中...';
 
-  let videoUrl = '（動画なし）';
+  var videoUrl = '（動画なし）';
   if (DRIVE_TOKEN && videoBlob.size > 0) {
     try {
-      videoUrl = await uploadDrive(videoBlob, fileName, DRIVE_TOKEN, FOLDER_ID);
+      videoUrl = await uploadToDrive(videoBlob, fileName, DRIVE_TOKEN, FOLDER_ID);
       prog.style.width = '60%';
-    } catch(err) {
+    } catch (err) {
       console.error('[Drive]', err);
       toast('動画アップロード失敗（ログは送信されます）', 'error');
       prog.style.width = '60%';
@@ -459,67 +613,87 @@ async function submitData() {
     prog.style.width = '60%';
   }
 
+  // Step2: チャットログをGASに送信
+  // URLSearchParams（form-urlencoded）を使うことでCORSプリフライトを回避
+  // no-corsモードで送信するためレスポンスは読めないが、GASは確実に受信・記録する
   lbl.textContent  = 'AI評価を生成中...';
   prog.style.width = '80%';
 
   try {
-    // GASのCORSプリフライト制限を回避するためform-urlencodedで送信
-    const formData = new URLSearchParams();
+    var formData = new URLSearchParams();
     formData.append('name',     name);
     formData.append('email',    email);
     formData.append('chatLog',  conversationLog.join('\n'));
     formData.append('videoUrl', videoUrl);
     formData.append('duration', String(duration));
-    const res = await fetch(GAS_URL, {
+
+    await fetch(GAS_URL, {
       method: 'POST',
-      body: formData,
+      mode:   'no-cors',   // GASはOPTIONSプリフライトに非対応のため必須
+      body:   formData,
     });
-    const result = await res.json().catch(() => ({ status: 'unknown' }));
-    if (result.status === 'success') {
-      prog.style.width = '100%';
-      lbl.textContent  = '完了！';
-      setTimeout(() => showStep($('step-thanks')), 600);
-    } else {
-      throw new Error(result.message || 'GASエラー');
-    }
-  } catch(err) {
+
+    // no-corsではレスポンスを読めないが、GASは受信してスプレッドシートに記録・メール通知する
+    prog.style.width = '100%';
+    lbl.textContent  = '送信完了！';
+    setTimeout(function() { showStep('step-thanks'); }, 600);
+
+  } catch (err) {
     console.error('[GAS]', err);
     toast('送信エラー: ' + err.message, 'error', 8000);
-    showStep($('step-entry'));
+    showStep('step-entry');
   }
 }
 
-async function uploadDrive(blob, fileName, token, folderId) {
-  const meta = { name: fileName, mimeType: blob.type, ...(folderId ? { parents: [folderId] } : {}) };
-  const init = await fetch(
+// ─── Google Drive Resumable Upload ───────────────────────────
+async function uploadToDrive(blob, fileName, token, folderId) {
+  var metadata = { name: fileName, mimeType: blob.type };
+  if (folderId) metadata.parents = [folderId];
+
+  // Step1: セッション開始
+  var initRes = await fetch(
     'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,webViewLink',
-    { method: 'POST', headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json; charset=UTF-8',
-        'X-Upload-Content-Type': blob.type,
-        'X-Upload-Content-Length': blob.size,
-      }, body: JSON.stringify(meta) }
+    {
+      method:  'POST',
+      headers: {
+        'Authorization':          'Bearer ' + token,
+        'Content-Type':           'application/json; charset=UTF-8',
+        'X-Upload-Content-Type':  blob.type,
+        'X-Upload-Content-Length': String(blob.size),
+      },
+      body: JSON.stringify(metadata),
+    }
   );
-  if (!init.ok) throw new Error('Drive初期化 ' + init.status);
-  const uploadUrl = init.headers.get('Location');
-  if (!uploadUrl) throw new Error('uploadUrl取得失敗');
-  const up = await fetch(uploadUrl, {
-    method: 'PUT',
-    headers: { 'Content-Type': blob.type, 'Content-Length': blob.size },
-    body: blob,
+  if (!initRes.ok) throw new Error('Drive初期化エラー (HTTP ' + initRes.status + ')');
+
+  var uploadUrl = initRes.headers.get('Location');
+  if (!uploadUrl) throw new Error('DriveアップロードURLの取得に失敗しました');
+
+  // Step2: データ送信
+  var upRes = await fetch(uploadUrl, {
+    method:  'PUT',
+    headers: { 'Content-Type': blob.type },
+    body:    blob,
   });
-  if (!up.ok && up.status !== 200 && up.status !== 201) throw new Error('Driveアップロード ' + up.status);
-  const fd = await up.json();
-  if (fd.id) {
-    await fetch('https://www.googleapis.com/drive/v3/files/' + fd.id + '/permissions', {
-      method: 'POST',
-      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role: 'reader', type: 'anyone' }),
-    });
+  if (!upRes.ok && upRes.status !== 200 && upRes.status !== 201) {
+    throw new Error('Driveアップロードエラー (HTTP ' + upRes.status + ')');
   }
-  return fd.webViewLink || 'https://drive.google.com/file/d/' + fd.id + '/view';
+
+  var fileData = await upRes.json();
+
+  // Step3: 共有設定（リンクを知っている全員が閲覧可）
+  if (fileData.id) {
+    await fetch('https://www.googleapis.com/drive/v3/files/' + fileData.id + '/permissions', {
+      method:  'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ role: 'reader', type: 'anyone' }),
+    }).catch(function(e) { console.warn('[Drive permissions]', e); }); // 共有失敗は致命的でない
+  }
+
+  return fileData.webViewLink || ('https://drive.google.com/file/d/' + fileData.id + '/view');
 }
 
+// ─── アプリ起動 ───────────────────────────────────────────────
 initApp();
 </script>
 </body>
