@@ -330,8 +330,8 @@ async function initiateWebSocket() {
     $('aiStatusText').textContent = 'AIサーバーの準備中…';
     webSocket.send(JSON.stringify({
       setup: {
-        // ★ 修正1: 最新のサポート対象モデルに変更
-        model: 'models/gemini-3.5-flash',
+        // ★ ここが決定的な修正箇所：Live APIの正式モデル名を指定
+        model: 'models/gemini-2.0-flash',
         generationConfig: {
           responseModalities: ['AUDIO', 'TEXT'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
@@ -388,7 +388,6 @@ async function initiateWebSocket() {
       toast('AIサーバーエラー: ' + msg, 'error', 12000);
       $('aiStatusText').textContent = '接続失敗 - 設定を確認してください';
       
-      // ★ 修正2: エラー時は終了ボタンを「最初からやり直す」ボタンに変化させる
       $('endInterviewBtn').textContent = '最初からやり直す'; 
       $('endInterviewBtn').className = 'btn btn-ghost'; 
       
@@ -486,7 +485,6 @@ function toBase64(buffer) {
 
 // ─── 終了処理 ────────────────────────────────────────────────
 $('endInterviewBtn').addEventListener('click', () => {
-  // ★ 修正3: エラーで停止している場合はリロードして回復させる
   if (!isInterviewActive) {
     location.reload();
     return;
