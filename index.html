@@ -49,7 +49,6 @@
 <body class="flex flex-col min-h-screen">
 
 <div id="toast"></div>
-
 <div id="initOverlay">
   <div class="spinner"></div>
   <p style="color:var(--muted);font-size:13px;">システムを初期化中...</p>
@@ -68,19 +67,11 @@
       <p style="color:var(--muted);font-size:13px;">履歴書不要。約5分の音声対話で選考が完了します。</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px;">
-      <div>
-        <span class="label">お名前</span>
-        <input type="text" id="userName" class="field" placeholder="山田 太郎" autocomplete="name">
-      </div>
-      <div>
-        <span class="label">メールアドレス</span>
-        <input type="email" id="userEmail" class="field" placeholder="sample@example.com" autocomplete="email">
-      </div>
+      <div><span class="label">お名前</span><input type="text" id="userName" class="field" placeholder="山田 太郎" autocomplete="name"></div>
+      <div><span class="label">メールアドレス</span><input type="email" id="userEmail" class="field" placeholder="sample@example.com" autocomplete="email"></div>
     </div>
     <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:14px;margin:18px 0;">
-      <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:10px;">
-        本選考では、人物の雰囲気やコミュニケーションの様子を確認するため、カメラ・マイクを使用したAI面接および動画録画を行います。ご提供いただいた情報・動画は選考目的以外には一切使用いたしません。
-      </p>
+      <p style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:10px;">本選考では、人物の雰囲気やコミュニケーションの様子を確認するため、カメラ・マイクを使用したAI面接および動画録画を行います。ご提供いただいた情報・動画は選考目的以外には一切使用いたしません。</p>
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
         <input type="checkbox" id="consentCheck" style="width:16px;height:16px;accent-color:var(--accent);">
         <span style="font-size:13px;font-weight:500;">規約に同意して面接に進む</span>
@@ -95,8 +86,7 @@
     <div style="position:relative;aspect-ratio:4/3;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:16px;">
       <video id="previewVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video>
       <div id="mediaLoading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--surface);">
-        <div class="spinner"></div>
-        <p style="font-size:12px;color:var(--muted);">カメラを起動中…</p>
+        <div class="spinner"></div><p style="font-size:12px;color:var(--muted);">カメラを起動中…</p>
       </div>
     </div>
     <div style="background:rgba(34,211,160,0.06);border:1px solid rgba(34,211,160,0.2);border-radius:10px;padding:12px 14px;margin-bottom:18px;">
@@ -138,12 +128,8 @@
       <div style="background:#000;position:relative;">
         <video id="interviewVideo" autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 50%);pointer-events:none;"></div>
-        <div style="position:absolute;top:12px;left:12px;">
-          <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.5);color:#aaa;">CANDIDATE</span>
-        </div>
-        <div style="position:absolute;bottom:12px;left:12px;right:12px;">
-          <p style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">カメラを正面に向け、自然にお話しください。</p>
-        </div>
+        <div style="position:absolute;top:12px;left:12px;"><span style="font-size:10px;font-weight:600;letter-spacing:0.08em;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.5);color:#aaa;">CANDIDATE</span></div>
+        <div style="position:absolute;bottom:12px;left:12px;right:12px;"><p style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">カメラを正面に向け、自然にお話しください。</p></div>
       </div>
     </div>
   </section>
@@ -162,23 +148,18 @@
     <div style="width:64px;height:64px;border-radius:50%;background:rgba(34,211,160,0.1);border:2px solid rgba(34,211,160,0.3);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;">✓</div>
     <h2 style="font-size:22px;font-weight:600;margin-bottom:8px;">面接完了</h2>
     <p style="font-size:14px;color:var(--muted);margin-bottom:16px;">お疲れ様でした。AI一次面接のご回答、ありがとうございました。</p>
-    <p style="font-size:12px;color:var(--muted);line-height:1.7;background:var(--surface2);border-radius:10px;padding:14px;">
-      回答内容は安全に保存されました。次の選考（Zoom面接）に進む場合は、担当者よりご連絡いたします。
-    </p>
+    <p style="font-size:12px;color:var(--muted);line-height:1.7;background:var(--surface2);border-radius:10px;padding:14px;">回答内容は安全に保存されました。次の選考（Zoom面接）に進む場合は、担当者よりご連絡いたします。</p>
   </section>
 
 </main>
 
+<footer style="border-top:1px solid var(--border);padding:14px;text-align:center;font-size:11px;color:var(--muted);">© 2026 AI Recruiting System</footer>
+
 <script>
 'use strict';
 
-// ══════════════════════════════════════════
-// ★ GASのデプロイURLをここに入力
-// ══════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXjzslhel_0zpgXlJIi9pf_kNrR-eWDICY5gxpo4ev_wbhw8VH0_hJ5tR452LGCe-8/exec';
-// ══════════════════════════════════════════
 
-// アプリ状態
 let GEMINI_KEY  = '';
 let DRIVE_TOKEN = '';
 let FOLDER_ID   = '';
@@ -199,96 +180,83 @@ let micSourceNode      = null;
 const $ = id => document.getElementById(id);
 
 function toast(msg, type, dur) {
-  type = type || 'info';
-  dur  = dur  || 8000; // 通知を長く表示
-  var el = $('toast');
-  el.textContent = msg;
-  el.className = 'show ' + type;
-  clearTimeout(el._t);
-  el._t = setTimeout(() => { el.className = ''; }, dur);
+  type = type || 'info'; dur = dur || 8000;
+  const el = $('toast');
+  el.textContent = msg; el.className = 'show ' + type;
+  clearTimeout(el._t); el._t = setTimeout(() => { el.className = ''; }, dur);
 }
 
 function showStep(stepId) {
   ['step-entry','step-setup','step-interview','step-processing','step-thanks']
     .forEach(id => $(id).style.display = 'none');
-  var el = $(stepId);
-  el.style.display = (stepId === 'step-interview') ? 'block' : '';
-  el.classList.remove('fade-in');
-  void el.offsetWidth;
-  el.classList.add('fade-in');
+  const el = $(stepId);
+  el.style.display = (stepId === 'step-interview') ? 'grid' : '';
+  el.classList.remove('fade-in'); void el.offsetWidth; el.classList.add('fade-in');
 }
 
-// ─── 初期化処理 ───────────────────────────────────────────
+// ─── 初期化: GASから設定値を取得 ─────────────────────────────
 async function initApp() {
   try {
     console.log('[Init] GASから設定を取得中...');
     const res = await fetch(GAS_URL + '?action=token');
     if (!res.ok) throw new Error('GAS接続エラー (HTTP ' + res.status + ')');
-
     const text = await res.text();
     let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      throw new Error('設定データの解析に失敗しました。GASのURLを確認してください。');
-    }
-
+    try { data = JSON.parse(text); }
+    catch (e) { throw new Error('設定データの解析に失敗。GASのURLを確認してください。'); }
     if (data.status !== 'ok') throw new Error(data.message || '設定取得に失敗しました');
-
     GEMINI_KEY  = data.geminiApiKey || '';
     DRIVE_TOKEN = data.driveToken   || '';
     FOLDER_ID   = data.folderId     || '';
-
     if (!GEMINI_KEY) throw new Error('サーバー側にGemini APIキーが設定されていません');
-
     console.log('[Init] 準備完了');
     $('initOverlay').style.display = 'none';
     showStep('step-entry');
-
   } catch (err) {
     console.error('[Init Error]', err);
-    $('initOverlay').innerHTML = `
-      <div style="text-align:center;padding:20px;max-width:360px;">
-        <p style="font-size:32px;margin-bottom:12px;">❌</p>
-        <p style="color:var(--danger);font-size:15px;font-weight:600;margin-bottom:8px;">初期化エラー</p>
-        <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:16px;">${err.message}</p>
-        <button onclick="location.reload()" style="background:var(--accent);color:#050f0b;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;">再試行</button>
-      </div>`;
+    $('initOverlay').innerHTML =
+      '<div style="text-align:center;padding:20px;max-width:360px;">' +
+      '<p style="font-size:32px;margin-bottom:12px;">❌</p>' +
+      '<p style="color:var(--danger);font-size:15px;font-weight:600;margin-bottom:8px;">初期化エラー</p>' +
+      '<p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:16px;">' + err.message + '</p>' +
+      '<button onclick="location.reload()" style="background:var(--accent);color:#050f0b;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;">再試行</button>' +
+      '</div>';
   }
 }
 
-// ─── UIイベント ──────────────────────────────────────────────
+// ─── バリデーション ───────────────────────────────────────────
 function validateEntry() {
-  const nameOk    = $('userName').value.trim().length > 0;
-  const emailOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('userEmail').value.trim());
-  const consentOk = $('consentCheck').checked;
-  $('startSetupBtn').disabled = !(nameOk && emailOk && consentOk);
+  $('startSetupBtn').disabled = !(
+    $('userName').value.trim().length > 0 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('userEmail').value.trim()) &&
+    $('consentCheck').checked
+  );
 }
 $('userName').addEventListener('input', validateEntry);
 $('userEmail').addEventListener('input', validateEntry);
 $('consentCheck').addEventListener('change', validateEntry);
 
+// ─── カメラ起動 ──────────────────────────────────────────────
 $('startSetupBtn').addEventListener('click', async () => {
   showStep('step-setup');
   $('mediaLoading').style.display = 'flex';
   $('startInterviewBtn').disabled = true;
-
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 10 } },
-      audio: { echoCancellation: true, noiseSuppression: true },
+      video: { width:{ideal:320}, height:{ideal:240}, frameRate:{ideal:10} },
+      audio: { echoCancellation:true, noiseSuppression:true },
     });
     $('previewVideo').srcObject = mediaStream;
     $('mediaLoading').style.display = 'none';
     $('startInterviewBtn').disabled = false;
   } catch (err) {
     console.error('[Media]', err);
-    $('mediaLoading').innerHTML = `
-      <div style="text-align:center;padding:20px;">
-        <p style="font-size:28px;margin-bottom:10px;">⚠️</p>
-        <p style="color:var(--danger);font-weight:500;margin-bottom:6px;">カメラ/マイクにアクセスできません</p>
-        <p style="font-size:12px;color:var(--muted);">ブラウザの設定から許可してください。</p>
-      </div>`;
+    $('mediaLoading').innerHTML =
+      '<div style="text-align:center;padding:20px;">' +
+      '<p style="font-size:28px;margin-bottom:10px;">⚠️</p>' +
+      '<p style="color:var(--danger);font-weight:500;margin-bottom:6px;">カメラ/マイクにアクセスできません</p>' +
+      '<p style="font-size:12px;color:var(--muted);">ブラウザの設定から許可してください。</p>' +
+      '</div>';
   }
 });
 
@@ -298,42 +266,36 @@ $('backToEntryBtn').addEventListener('click', () => {
   showStep('step-entry');
 });
 
+// ─── 面接開始 ────────────────────────────────────────────────
 $('startInterviewBtn').addEventListener('click', async () => {
   showStep('step-interview');
-  $('step-interview').style.display = 'grid';
   $('interviewVideo').srcObject = mediaStream;
-
   isInterviewActive  = true;
   interviewStartTime = Date.now();
   timerInterval = setInterval(updateTimer, 1000);
-
   startRecording();
   setupSpeechRecognition();
   await initiateWebSocket();
 });
 
-// ─── 面接ロジック ──────────────────────────────────────────
 function startRecording() {
   recordedChunks = [];
-  const mimeTypes = ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm', 'video/mp4'];
+  const mimeTypes = ['video/webm;codecs=vp8,opus','video/webm;codecs=vp9,opus','video/webm','video/mp4'];
   let mime = '';
-  for (let m of mimeTypes) { if (MediaRecorder.isTypeSupported(m)) { mime = m; break; } }
+  for (const m of mimeTypes) { if (MediaRecorder.isTypeSupported(m)) { mime = m; break; } }
   try {
-    mediaRecorder = new MediaRecorder(mediaStream, mime ? { mimeType: mime, videoBitsPerSecond: 100000, audioBitsPerSecond: 32000 } : {});
-  } catch (e) {
-    mediaRecorder = new MediaRecorder(mediaStream);
-  }
+    mediaRecorder = new MediaRecorder(mediaStream,
+      mime ? { mimeType:mime, videoBitsPerSecond:100000, audioBitsPerSecond:32000 } : {});
+  } catch (e) { mediaRecorder = new MediaRecorder(mediaStream); }
   mediaRecorder.ondataavailable = e => { if (e.data && e.data.size > 0) recordedChunks.push(e.data); };
   mediaRecorder.start(1000);
 }
 
 function updateTimer() {
   const s = Math.floor((Date.now() - interviewStartTime) / 1000);
-  $('interviewTimer').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
-  if (s >= 300 && isInterviewActive) {
-    toast('面接時間の上限（5分）に達しました');
-    completeInterview();
-  }
+  $('interviewTimer').textContent =
+    String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+  if (s >= 300 && isInterviewActive) { toast('面接時間の上限（5分）に達しました'); completeInterview(); }
 }
 
 function setupSpeechRecognition() {
@@ -351,44 +313,54 @@ function setupSpeechRecognition() {
       }
     }
   };
+  speechRecognition.onerror = e => console.warn('[SR error]', e.error);
   speechRecognition.onend = () => { if (isInterviewActive) speechRecognition.start(); };
   speechRecognition.start();
 }
 
+// ─── Gemini Live API WebSocket ────────────────────────────────
 async function initiateWebSocket() {
   console.log('[WebSocket] 接続開始...');
-  const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${GEMINI_KEY}`;
+
+  // ★ 修正1: v1alpha → v1beta（gemini-2.0-flash-live-001はv1betaが必要）
+  const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${GEMINI_KEY}`;
   webSocket = new WebSocket(wsUrl);
 
   webSocket.onopen = () => {
-    console.log('[WebSocket] 接続成功。Setup情報を送信します。');
+    console.log('[WebSocket] 接続成功');
     $('aiStatusText').textContent = 'AIサーバーの準備中…';
-    
-    // ★最新の安定版モデルに変更
     webSocket.send(JSON.stringify({
       setup: {
-        model: 'models/gemini-2.0-flash',
+        // ★ 修正2: Live APIの正式モデル名を使用
+        model: 'models/gemini-2.0-flash-live-001',
         generationConfig: {
           responseModalities: ['AUDIO', 'TEXT'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
         },
-        systemInstruction: { parts: [{ text: 'あなたは会社のAI選考官です。優しく、聞き取りやすく、ハキハキとした口調で話してください。以下の情報を1つずつ引き出してください：①現在の状況、②応募理由、③子供や教育に関わった経験、④勤務条件（場所・曜日・シフト希望）。5分経過したら面接を終了してください。' }] },
+        systemInstruction: { parts: [{ text:
+          'あなたは会社のAI選考官です。優しく、聞き取りやすく、ハキハキとした口調で話してください。' +
+          '以下の情報を1つずつ会話を通じて自然に引き出してください：' +
+          '①現在の状況（学生・主婦・会社員など）、②応募理由、③子供や教育に関わった経験、' +
+          '④勤務条件（場所・曜日・シフト希望）。' +
+          '一問一答にならず、自然な相槌を入れながら進めてください。' +
+          '全項目が終わるか5分経過したら「面接は以上です。お時間をいただきありがとうございました。」と伝えて終了してください。'
+        }] },
       },
     }));
   };
 
-  webSocket.onmessage = async (e) => {
+  webSocket.onmessage = async e => {
     const text = (e.data instanceof Blob) ? await e.data.text() : e.data;
     let r; try { r = JSON.parse(text); } catch (ex) { return; }
 
     if (r.error) {
-      console.error('[Gemini API Error Payload]', r.error);
+      console.error('[Gemini Error]', r.error);
       toast('AIサーバーエラー: ' + r.error.message, 'error');
       return;
     }
 
     if (r.setupComplete) {
-      console.log('[WebSocket] サーバー準備完了！マイクストリームを開始します。');
+      console.log('[WebSocket] setupComplete → マイク開始');
       $('aiStatusText').textContent = '面接官がオンラインになりました';
       setupMicWorklet();
       return;
@@ -396,7 +368,7 @@ async function initiateWebSocket() {
 
     const parts = r.serverContent && r.serverContent.modelTurn && r.serverContent.modelTurn.parts;
     if (!parts) return;
-    for (let p of parts) {
+    for (const p of parts) {
       if (p.inlineData && p.inlineData.mimeType && p.inlineData.mimeType.startsWith('audio/pcm')) {
         playPCM(atob(p.inlineData.data));
       }
@@ -407,38 +379,50 @@ async function initiateWebSocket() {
     }
   };
 
-  webSocket.onclose = (event) => {
-    console.warn(`[WebSocket Closed] Code: ${event.code}, Reason: ${event.reason || 'なし'}`);
-    if (isInterviewActive) {
-      // 1000(正常), 1005(ステータスなし) 以外の異常切断
-      if (event.code !== 1000 && event.code !== 1005) {
-        toast(`通信切断 (コード: ${event.code})。F12コンソールを確認してください。`, 'error');
-      }
-      completeInterview();
+  webSocket.onclose = event => {
+    console.warn('[WebSocket Closed] Code:', event.code, 'Reason:', event.reason || 'なし');
+    if (!isInterviewActive) return;
+
+    // ★ 修正3: コード1006 = 接続失敗（APIキー不正・モデル名不正・ネットワーク問題）
+    // → setupCompleteが来る前に切断 = 面接未開始なので completeInterview() を呼ばない
+    if (event.code === 1006) {
+      console.error('[WebSocket] 接続失敗(1006): APIキー・モデル名・ネットワークを確認してください');
+      toast('AIサーバーへの接続に失敗しました。F12コンソールを確認してください。', 'error', 12000);
+      $('aiStatusText').textContent = '接続失敗 - 設定を確認してください';
+      isInterviewActive = false;
+      return; // 送信処理に進まない
     }
+
+    if (event.code !== 1000 && event.code !== 1005) {
+      toast('通信切断 (コード: ' + event.code + ')', 'error');
+    }
+    completeInterview();
   };
 
-  webSocket.onerror = (err) => {
-    console.error('[WebSocket Error Object]', err);
+  // ★ 修正4: onerrorは状態表示のみ（oncloseが後続で必ず呼ばれるため二重処理しない）
+  webSocket.onerror = err => {
+    console.error('[WebSocket Error]', err);
     $('aiStatusText').textContent = '接続エラーが発生しました';
-    toast('WebSocket通信エラー。APIキーやネットワークを確認してください。', 'error');
   };
 }
 
+// ─── AudioWorklet: マイク音声16kHzで送信 ──────────────────────
 async function setupMicWorklet() {
   try {
-    if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+    if (!sharedAudioCtx) {
+      sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+    }
     const micCtx = new AudioContext({ sampleRate: 16000 });
     const workletCode = `
       class P extends AudioWorkletProcessor {
         constructor(){super();this._b=[];}
         process(inputs){
-          var ch=inputs[0]&&inputs[0][0];if(!ch)return true;
-          for(var i=0;i<ch.length;i++)this._b.push(ch[i]);
+          const ch=inputs[0]&&inputs[0][0]; if(!ch)return true;
+          for(let i=0;i<ch.length;i++)this._b.push(ch[i]);
           while(this._b.length>=4096){
-            var c=this._b.splice(0,4096);
-            var buf=new Int16Array(4096);
-            for(var j=0;j<4096;j++){var s=Math.max(-1,Math.min(1,c[j]));buf[j]=s<0?s*0x8000:s*0x7FFF;}
+            const c=this._b.splice(0,4096);
+            const buf=new Int16Array(4096);
+            for(let j=0;j<4096;j++){const s=Math.max(-1,Math.min(1,c[j]));buf[j]=s<0?s*0x8000:s*0x7FFF;}
             this.port.postMessage(buf.buffer,[buf.buffer]);
           }
           return true;
@@ -448,49 +432,41 @@ async function setupMicWorklet() {
     const blobUrl = URL.createObjectURL(new Blob([workletCode], { type: 'application/javascript' }));
     await micCtx.audioWorklet.addModule(blobUrl);
     URL.revokeObjectURL(blobUrl);
-
     micSourceNode = micCtx.createMediaStreamSource(mediaStream);
     workletNode   = new AudioWorkletNode(micCtx, 'mic-p');
-
-    workletNode.port.onmessage = (e) => {
+    workletNode.port.onmessage = e => {
       if (!isInterviewActive || !webSocket || webSocket.readyState !== WebSocket.OPEN) return;
-      webSocket.send(JSON.stringify({ realtimeInput: { mediaChunks: [{ mimeType: 'audio/pcm;rate=16000', data: toBase64(e.data) }] } }));
+      webSocket.send(JSON.stringify({
+        realtimeInput: { mediaChunks: [{ mimeType: 'audio/pcm;rate=16000', data: toBase64(e.data) }] }
+      }));
     };
     micSourceNode.connect(workletNode);
+    console.log('[Worklet] マイク送信開始');
   } catch (err) {
-    console.error('[Worklet Init Error]', err);
+    console.error('[Worklet Error]', err);
     toast('マイクの初期化に失敗しました', 'error');
   }
 }
 
+// ─── PCM再生 ─────────────────────────────────────────────────
 function playPCM(raw) {
   if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
   if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
-
   const i16 = new Int16Array(new ArrayBuffer(raw.length));
-  for (let i = 0; i < raw.length / 2; i++) i16[i] = (raw.charCodeAt(i * 2) & 0xff) | ((raw.charCodeAt(i * 2 + 1) & 0xff) << 8);
+  for (let i = 0; i < raw.length/2; i++) i16[i] = (raw.charCodeAt(i*2)&0xff)|((raw.charCodeAt(i*2+1)&0xff)<<8);
   const f32 = new Float32Array(i16.length);
-  for (let j = 0; j < i16.length; j++) f32[j] = i16[j] < 0 ? i16[j] / 0x8000 : i16[j] / 0x7FFF;
-
+  for (let j = 0; j < i16.length; j++) f32[j] = i16[j]<0 ? i16[j]/0x8000 : i16[j]/0x7FFF;
   const buf = sharedAudioCtx.createBuffer(1, f32.length, 24000);
   buf.getChannelData(0).set(f32);
   const src = sharedAudioCtx.createBufferSource();
-  src.buffer = buf;
-  src.connect(sharedAudioCtx.destination);
-
-  const now = sharedAudioCtx.currentTime;
-  let startAt = now;
+  src.buffer = buf; src.connect(sharedAudioCtx.destination);
+  const now = sharedAudioCtx.currentTime; let startAt = now;
   audioQueue = audioQueue.filter(x => x.endAt > now - 1);
-  if (audioQueue.length > 0) {
-    const last = audioQueue[audioQueue.length - 1];
-    if (last.endAt > now) startAt = last.endAt;
-  }
+  if (audioQueue.length > 0) { const l = audioQueue[audioQueue.length-1]; if (l.endAt > now) startAt = l.endAt; }
   audioQueue.push({ src, endAt: startAt + buf.duration });
   src.start(startAt);
-
   $('aiStatusText').textContent = 'AI面接官が質問中…';
   $('soundWave').classList.add('wave-active');
-
   src.onended = () => {
     audioQueue = audioQueue.filter(x => x.src !== src);
     if (audioQueue.length === 0) {
@@ -501,13 +477,12 @@ function playPCM(raw) {
 }
 
 function toBase64(buffer) {
-  let binary = '';
-  const bytes = new Uint8Array(buffer);
-  for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-  return btoa(binary);
+  const bytes = new Uint8Array(buffer); let s = '';
+  for (let i = 0; i < bytes.byteLength; i++) s += String.fromCharCode(bytes[i]);
+  return btoa(s);
 }
 
-// ─── 終了・データ送信処理 ────────────────────────────────────
+// ─── 終了処理 ────────────────────────────────────────────────
 $('endInterviewBtn').addEventListener('click', () => {
   if (confirm('面接を終了して回答を送信しますか？')) completeInterview();
 });
@@ -516,25 +491,24 @@ async function completeInterview() {
   if (!isInterviewActive) return;
   isInterviewActive = false;
   clearInterval(timerInterval);
-
-  if (speechRecognition) try { speechRecognition.stop(); } catch (e) {}
-  if (webSocket) webSocket.close();
-  if (workletNode) try { workletNode.disconnect(); } catch (e) {}
+  if (speechRecognition) try { speechRecognition.onend = null; speechRecognition.stop(); } catch (e) {}
+  // ★ 修正5: OPEN状態のときのみclose()（二重呼び出しでのエラー防止）
+  if (webSocket && webSocket.readyState === WebSocket.OPEN) webSocket.close();
+  if (workletNode)   try { workletNode.disconnect();   } catch (e) {}
   if (micSourceNode) try { micSourceNode.disconnect(); } catch (e) {}
   if (sharedAudioCtx) { try { await sharedAudioCtx.close(); sharedAudioCtx = null; } catch (e) {} }
-
   showStep('step-processing');
-
+  // onstop完了を確実に待ってからBlob化
   await new Promise(resolve => {
     if (!mediaRecorder || mediaRecorder.state === 'inactive') return resolve();
     mediaRecorder.onstop = resolve;
     mediaRecorder.stop();
   });
   if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
-
   await submitData();
 }
 
+// ─── データ送信 ───────────────────────────────────────────────
 async function submitData() {
   const name     = $('userName').value.trim();
   const email    = $('userEmail').value.trim();
@@ -542,12 +516,12 @@ async function submitData() {
   const prog     = $('uploadProgress');
   const lbl      = $('progressLabel');
 
-  const mime = (recordedChunks[0] && recordedChunks[0].type) || 'video/webm';
+  const mime      = (recordedChunks[0] && recordedChunks[0].type) || 'video/webm';
   const videoBlob = new Blob(recordedChunks, { type: mime });
-  const fileName = `${Date.now()}_${name.replace(/\s/g, '_')}_interview.${mime.includes('mp4') ? 'mp4' : 'webm'}`;
+  const ext       = mime.includes('mp4') ? 'mp4' : 'webm';
+  const fileName  = `${Date.now()}_${name.replace(/\s/g,'_')}_interview.${ext}`;
 
-  prog.style.width = '20%';
-  lbl.textContent  = '動画をDriveに保存中...';
+  prog.style.width = '20%'; lbl.textContent = '動画をDriveに保存中...';
 
   let videoUrl = '（動画なし）';
   if (DRIVE_TOKEN && videoBlob.size > 0) {
@@ -555,84 +529,69 @@ async function submitData() {
       videoUrl = await uploadToDrive(videoBlob, fileName, DRIVE_TOKEN, FOLDER_ID);
       prog.style.width = '60%';
     } catch (err) {
-      console.error('[Drive Upload Error]', err);
-      toast('動画アップロードに失敗しました（ログは送信されます）', 'error');
+      console.error('[Drive]', err);
+      toast('動画アップロード失敗（ログは送信されます）', 'error');
+      prog.style.width = '60%';
     }
-  }
+  } else { prog.style.width = '60%'; }
 
-  prog.style.width = '80%';
-  lbl.textContent  = 'AI評価を生成し、データを記録中...';
+  prog.style.width = '80%'; lbl.textContent = 'AI評価を生成中...';
 
-  const payloadStr = JSON.stringify({
-    name: name,
-    email: email,
-    chatLog: conversationLog.join('\n'),
-    videoUrl: videoUrl,
-    duration: duration
-  });
-
+  // text/plain でJSONをPOST → GASのe.postData.contentsで受け取れる
+  // text/plainはCORSプリフライト不要（simple request）なのでno-cors不要
   try {
     const res = await fetch(GAS_URL, {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: payloadStr
+      body:    JSON.stringify({ name, email, chatLog: conversationLog.join('\n'), videoUrl, duration }),
     });
-
-    const responseText = await res.text();
-    let resultData;
-
-    try {
-      resultData = JSON.parse(responseText);
-    } catch (parseErr) {
-      console.error('[GAS Raw Response]', responseText);
-      throw new Error(`サーバーからの応答が不正です。\n応答内容: ${responseText.slice(0, 50)}...`);
+    const rawText = await res.text();
+    let result;
+    try { result = JSON.parse(rawText); }
+    catch (e) {
+      console.error('[GAS raw response]', rawText);
+      throw new Error('サーバー応答の解析失敗: ' + rawText.slice(0, 80));
     }
-
-    if (resultData.status !== 'success') {
-      throw new Error(resultData.message || 'サーバー側で不明なエラーが発生しました');
-    }
-
-    prog.style.width = '100%';
-    lbl.textContent  = '送信完了！';
+    if (result.status !== 'success') throw new Error(result.message || 'サーバーエラー');
+    prog.style.width = '100%'; lbl.textContent = '送信完了！';
     setTimeout(() => showStep('step-thanks'), 600);
-
   } catch (err) {
-    console.error('[Submit Error]', err);
-    toast('エラーが発生しました: ' + err.message, 'error');
+    console.error('[Submit]', err);
+    toast('送信エラー: ' + err.message, 'error', 10000);
     lbl.textContent = '送信に失敗しました';
     prog.style.background = 'var(--danger)';
   }
 }
 
+// ─── Drive Resumable Upload ───────────────────────────────────
 async function uploadToDrive(blob, fileName, token, folderId) {
   const metadata = { name: fileName, mimeType: blob.type };
   if (folderId) metadata.parents = [folderId];
-
-  const initRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,webViewLink', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-Upload-Content-Type': blob.type,
-      'X-Upload-Content-Length': String(blob.size),
-    },
-    body: JSON.stringify(metadata),
-  });
-  if (!initRes.ok) throw new Error(`Drive init error: ${initRes.status}`);
-
+  const initRes = await fetch(
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,webViewLink',
+    { method:'POST', headers:{
+        'Authorization':'Bearer '+token,
+        'Content-Type':'application/json; charset=UTF-8',
+        'X-Upload-Content-Type':blob.type,
+        'X-Upload-Content-Length':String(blob.size),
+      }, body:JSON.stringify(metadata) }
+  );
+  if (!initRes.ok) throw new Error('Drive初期化エラー HTTP' + initRes.status);
   const uploadUrl = initRes.headers.get('Location');
-  const upRes = await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': blob.type }, body: blob });
-  if (!upRes.ok && upRes.status !== 200 && upRes.status !== 201) throw new Error(`Drive upload error: ${upRes.status}`);
-
-  const fileData = await upRes.json();
-  if (fileData.id) {
-    await fetch(`https://www.googleapis.com/drive/v3/files/${fileData.id}/permissions`, {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ role: 'reader', type: 'anyone' }),
-    }).catch(e => console.warn('[Drive Auth]', e));
+  if (!uploadUrl) throw new Error('DriveアップロードURL取得失敗');
+  const upRes = await fetch(uploadUrl, {
+    method:'PUT', headers:{'Content-Type':blob.type}, body:blob,
+  });
+  if (!upRes.ok && upRes.status !== 200 && upRes.status !== 201) throw new Error('Driveアップ失敗 HTTP' + upRes.status);
+  const fd = await upRes.json();
+  if (fd.id) {
+    await fetch('https://www.googleapis.com/drive/v3/files/'+fd.id+'/permissions', {
+      method:'POST',
+      headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({role:'reader',type:'anyone'}),
+    }).catch(e => console.warn('[Drive permissions]', e));
   }
-  return fileData.webViewLink || (`https://drive.google.com/file/d/${fileData.id}/view`);
+  return fd.webViewLink || ('https://drive.google.com/file/d/'+fd.id+'/view');
 }
 
 initApp();
