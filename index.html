@@ -332,7 +332,7 @@ async function initiateWebSocket() {
     webSocket.send(JSON.stringify({
       setup: {
         // ★ 修正2: Live APIの正式モデル名を使用
-        model: 'models/gemini-2.0-flash-live-001',
+        model: 'models/gemini-2.0-flash-exp',
         generationConfig: {
           responseModalities: ['AUDIO', 'TEXT'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
@@ -383,11 +383,13 @@ async function initiateWebSocket() {
     console.warn('[WebSocket Closed] Code:', event.code, 'Reason:', event.reason || 'なし');
     if (!isInterviewActive) return;
 
-    // ★ 修正3: コード1006 = 接続失敗（APIキー不正・モデル名不正・ネットワーク問題）
-    // → setupCompleteが来る前に切断 = 面接未開始なので completeInterview() を呼ばない
-    if (event.code === 1006) {
-      console.error('[WebSocket] 接続失敗(1006): APIキー・モデル名・ネットワークを確認してください');
-      toast('AIサーバーへの接続に失敗しました。F12コンソールを確認してください。', 'error', 12000);
+    // 1006: 接続失敗（ネットワーク・APIキー不正）
+    // 1008: ポリシー違反（モデル名不正・権限なし）
+    // どちらも面接未開始なので completeInterview() を呼ばない
+    if (event.code === 1006 || event.code === 1008) {
+      console.error('[WebSocket] 接続失敗(コード:', event.code, '):', event.reason);
+      const msg = event.code === 1008 ? 'モデル/APIキーエラー(1008)' : '接続失敗('+event.code+')';
+      toast('AIサーバーエラー: ' + msg, 'error', 12000);
       $('aiStatusText').textContent = '接続失敗 - 設定を確認してください';
       isInterviewActive = false;
       return; // 送信処理に進まない
