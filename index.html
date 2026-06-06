@@ -84,7 +84,7 @@
     <h2 style="font-size:18px;font-weight:600;margin-bottom:4px;">カメラ・マイクの確認</h2>
     <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">面接開始前に映像・音声を確認してください。</p>
     <div style="position:relative;aspect-ratio:4/3;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:16px;">
-      <video id="previewVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video>
+      <video id="previewVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover"></video>
       <div id="mediaLoading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--surface);">
         <div class="spinner"></div><p style="font-size:12px;color:var(--muted);">カメラを起動中…</p>
       </div>
@@ -322,7 +322,6 @@ function setupSpeechRecognition() {
 async function initiateWebSocket() {
   console.log('[WebSocket] 接続開始...');
 
-  // ★ 修正1: v1alpha → v1beta（gemini-2.0-flash-live-001はv1betaが必要）
   const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${GEMINI_KEY}`;
   webSocket = new WebSocket(wsUrl);
 
@@ -331,8 +330,8 @@ async function initiateWebSocket() {
     $('aiStatusText').textContent = 'AIサーバーの準備中…';
     webSocket.send(JSON.stringify({
       setup: {
-        // ★ 修正2: Live APIの正式モデル名を使用
-        model: 'models/gemini-2.0-flash-exp',
+        // ★ 修正: 最新のサポート対象モデルに変更
+        model: 'models/gemini-3.5-flash',
         generationConfig: {
           responseModalities: ['AUDIO', 'TEXT'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
@@ -383,16 +382,13 @@ async function initiateWebSocket() {
     console.warn('[WebSocket Closed] Code:', event.code, 'Reason:', event.reason || 'なし');
     if (!isInterviewActive) return;
 
-    // 1006: 接続失敗（ネットワーク・APIキー不正）
-    // 1008: ポリシー違反（モデル名不正・権限なし）
-    // どちらも面接未開始なので completeInterview() を呼ばない
     if (event.code === 1006 || event.code === 1008) {
       console.error('[WebSocket] 接続失敗(コード:', event.code, '):', event.reason);
       const msg = event.code === 1008 ? 'モデル/APIキーエラー(1008)' : '接続失敗('+event.code+')';
       toast('AIサーバーエラー: ' + msg, 'error', 12000);
       $('aiStatusText').textContent = '接続失敗 - 設定を確認してください';
       isInterviewActive = false;
-      return; // 送信処理に進まない
+      return; 
     }
 
     if (event.code !== 1000 && event.code !== 1005) {
@@ -401,7 +397,6 @@ async function initiateWebSocket() {
     completeInterview();
   };
 
-  // ★ 修正4: onerrorは状態表示のみ（oncloseが後続で必ず呼ばれるため二重処理しない）
   webSocket.onerror = err => {
     console.error('[WebSocket Error]', err);
     $('aiStatusText').textContent = '接続エラーが発生しました';
@@ -494,13 +489,11 @@ async function completeInterview() {
   isInterviewActive = false;
   clearInterval(timerInterval);
   if (speechRecognition) try { speechRecognition.onend = null; speechRecognition.stop(); } catch (e) {}
-  // ★ 修正5: OPEN状態のときのみclose()（二重呼び出しでのエラー防止）
   if (webSocket && webSocket.readyState === WebSocket.OPEN) webSocket.close();
   if (workletNode)   try { workletNode.disconnect();   } catch (e) {}
   if (micSourceNode) try { micSourceNode.disconnect(); } catch (e) {}
   if (sharedAudioCtx) { try { await sharedAudioCtx.close(); sharedAudioCtx = null; } catch (e) {} }
   showStep('step-processing');
-  // onstop完了を確実に待ってからBlob化
   await new Promise(resolve => {
     if (!mediaRecorder || mediaRecorder.state === 'inactive') return resolve();
     mediaRecorder.onstop = resolve;
@@ -539,8 +532,6 @@ async function submitData() {
 
   prog.style.width = '80%'; lbl.textContent = 'AI評価を生成中...';
 
-  // text/plain でJSONをPOST → GASのe.postData.contentsで受け取れる
-  // text/plainはCORSプリフライト不要（simple request）なのでno-cors不要
   try {
     const res = await fetch(GAS_URL, {
       method:  'POST',
