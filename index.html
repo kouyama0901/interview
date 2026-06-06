@@ -200,7 +200,7 @@ const $ = id => document.getElementById(id);
 
 function toast(msg, type, dur) {
   type = type || 'info';
-  dur  = dur  || 6000;
+  dur  = dur  || 8000; // 通知を長く表示
   var el = $('toast');
   el.textContent = msg;
   el.className = 'show ' + type;
@@ -221,6 +221,7 @@ function showStep(stepId) {
 // ─── 初期化処理 ───────────────────────────────────────────
 async function initApp() {
   try {
+    console.log('[Init] GASから設定を取得中...');
     const res = await fetch(GAS_URL + '?action=token');
     if (!res.ok) throw new Error('GAS接続エラー (HTTP ' + res.status + ')');
 
@@ -240,11 +241,12 @@ async function initApp() {
 
     if (!GEMINI_KEY) throw new Error('サーバー側にGemini APIキーが設定されていません');
 
+    console.log('[Init] 準備完了');
     $('initOverlay').style.display = 'none';
     showStep('step-entry');
 
   } catch (err) {
-    console.error('Init Error:', err);
+    console.error('[Init Error]', err);
     $('initOverlay').innerHTML = `
       <div style="text-align:center;padding:20px;max-width:360px;">
         <p style="font-size:32px;margin-bottom:12px;">❌</p>
@@ -354,16 +356,18 @@ function setupSpeechRecognition() {
 }
 
 async function initiateWebSocket() {
+  console.log('[WebSocket] 接続開始...');
   const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${GEMINI_KEY}`;
   webSocket = new WebSocket(wsUrl);
 
   webSocket.onopen = () => {
+    console.log('[WebSocket] 接続成功。Setup情報を送信します。');
     $('aiStatusText').textContent = 'AIサーバーの準備中…';
     
-    // まだマイク音声は送らず、設定情報だけを送信する
+    // ★最新の安定版モデルに変更
     webSocket.send(JSON.stringify({
       setup: {
-        model: 'models/gemini-2.0-flash-exp',
+        model: 'models/gemini-2.0-flash',
         generationConfig: {
           responseModalities: ['AUDIO', 'TEXT'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
@@ -377,16 +381,14 @@ async function initiateWebSocket() {
     const text = (e.data instanceof Blob) ? await e.data.text() : e.data;
     let r; try { r = JSON.parse(text); } catch (ex) { return; }
 
-    // エラーが返ってきた場合
     if (r.error) {
-      console.error('[Gemini API Error]', r.error);
-      toast('AIサーバーエラー: ' + r.error.message, 'error', 10000);
+      console.error('[Gemini API Error Payload]', r.error);
+      toast('AIサーバーエラー: ' + r.error.message, 'error');
       return;
     }
 
-    // ★重要: サーバー側で準備が完了したタイミングで初めてマイクを繋ぐ
     if (r.setupComplete) {
-      console.log('[Gemini] Setup Complete');
+      console.log('[WebSocket] サーバー準備完了！マイクストリームを開始します。');
       $('aiStatusText').textContent = '面接官がオンラインになりました';
       setupMicWorklet();
       return;
@@ -406,20 +408,20 @@ async function initiateWebSocket() {
   };
 
   webSocket.onclose = (event) => {
-    console.log('[WebSocket Closed] Code:', event.code, 'Reason:', event.reason);
+    console.warn(`[WebSocket Closed] Code: ${event.code}, Reason: ${event.reason || 'なし'}`);
     if (isInterviewActive) {
-      // 正常終了以外の場合はエラー通知を出す
+      // 1000(正常), 1005(ステータスなし) 以外の異常切断
       if (event.code !== 1000 && event.code !== 1005) {
-        toast(`AIとの通信が切断されました (エラーコード: ${event.code})`, 'error');
+        toast(`通信切断 (コード: ${event.code})。F12コンソールを確認してください。`, 'error');
       }
       completeInterview();
     }
   };
 
   webSocket.onerror = (err) => {
-    console.error('[WebSocket Error]', err);
+    console.error('[WebSocket Error Object]', err);
     $('aiStatusText').textContent = '接続エラーが発生しました';
-    toast('通信エラー。APIキーやネットワークを確認してください。', 'error', 8000);
+    toast('WebSocket通信エラー。APIキーやネットワークを確認してください。', 'error');
   };
 }
 
@@ -456,7 +458,7 @@ async function setupMicWorklet() {
     };
     micSourceNode.connect(workletNode);
   } catch (err) {
-    console.error('[Worklet]', err);
+    console.error('[Worklet Init Error]', err);
     toast('マイクの初期化に失敗しました', 'error');
   }
 }
@@ -583,7 +585,7 @@ async function submitData() {
       resultData = JSON.parse(responseText);
     } catch (parseErr) {
       console.error('[GAS Raw Response]', responseText);
-      throw new Error(`サーバーからの応答が不正です。GASのエラーログシートを確認してください。\n応答内容: ${responseText.slice(0, 50)}...`);
+      throw new Error(`サーバーからの応答が不正です。\n応答内容: ${responseText.slice(0, 50)}...`);
     }
 
     if (resultData.status !== 'success') {
@@ -596,7 +598,7 @@ async function submitData() {
 
   } catch (err) {
     console.error('[Submit Error]', err);
-    toast('エラーが発生しました: ' + err.message, 'error', 10000);
+    toast('エラーが発生しました: ' + err.message, 'error');
     lbl.textContent = '送信に失敗しました';
     prog.style.background = 'var(--danger)';
   }
@@ -616,11 +618,11 @@ async function uploadToDrive(blob, fileName, token, folderId) {
     },
     body: JSON.stringify(metadata),
   });
-  if (!initRes.ok) throw new Error('Drive init error');
+  if (!initRes.ok) throw new Error(`Drive init error: ${initRes.status}`);
 
   const uploadUrl = initRes.headers.get('Location');
   const upRes = await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': blob.type }, body: blob });
-  if (!upRes.ok && upRes.status !== 200 && upRes.status !== 201) throw new Error('Drive upload error');
+  if (!upRes.ok && upRes.status !== 200 && upRes.status !== 201) throw new Error(`Drive upload error: ${upRes.status}`);
 
   const fileData = await upRes.json();
   if (fileData.id) {
