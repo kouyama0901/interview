@@ -7,11 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#0a0b0f; --surface:#11131a; --surface2:#181b25;
-      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
-      --text:#e8e9ed; --muted:#6b7080; --accent:#22d3a0; --danger:#f04646;
-    }
+    /* CSSは元のままなので省略せず記述します */
+    :root { --bg:#0a0b0f; --surface:#11131a; --surface2:#181b25; --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12); --text:#e8e9ed; --muted:#6b7080; --accent:#22d3a0; --danger:#f04646; }
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.6; min-height:100vh; }
     @keyframes spin  { to { transform: rotate(360deg); } }
@@ -54,13 +51,11 @@
 
 <div id="toast"></div>
 
-<!-- 初期化中オーバーレイ -->
 <div id="initOverlay">
   <div class="spinner"></div>
   <p style="color:var(--muted);font-size:13px;">システムを初期化中...</p>
 </div>
 
-<!-- ヘッダー -->
 <header style="border-bottom:1px solid var(--border);background:var(--surface);" class="px-5 py-3 flex items-center gap-2">
   <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);" class="animate-pulse"></div>
   <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--muted);">AI ONE-STAGE INTERVIEW</span>
@@ -68,7 +63,6 @@
 
 <main class="flex-grow flex items-center justify-center p-4">
 
-  <!-- STEP 1: 応募者情報入力 -->
   <section id="step-entry" class="card" style="width:100%;max-width:440px;display:none;">
     <div style="text-align:center;margin-bottom:24px;">
       <h2 style="font-size:22px;font-weight:600;margin-bottom:6px;">AI 一次選考面接</h2>
@@ -93,10 +87,9 @@
         <span style="font-size:13px;font-weight:500;">規約に同意して面接に進む</span>
       </label>
     </div>
-    <button id="startSetupBtn" class="btn btn-primary" disabled>面接準備を開始　→</button>
+    <button id="startSetupBtn" class="btn btn-primary" disabled>面接準備を開始 →</button>
   </section>
 
-  <!-- STEP 2: カメラ・マイク確認 -->
   <section id="step-setup" class="card" style="width:100%;max-width:500px;display:none;">
     <h2 style="font-size:18px;font-weight:600;margin-bottom:4px;">カメラ・マイクの確認</h2>
     <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">面接開始前に映像・音声を確認してください。</p>
@@ -117,10 +110,8 @@
     </div>
   </section>
 
-  <!-- STEP 3: 面接中 -->
   <section id="step-interview" style="width:100%;max-width:860px;display:none;border-radius:16px;overflow:hidden;border:1px solid var(--border);">
     <div style="display:grid;grid-template-columns:1fr 1fr;min-height:480px;">
-      <!-- 左: AIパネル -->
       <div style="background:var(--surface);padding:24px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--border);">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="badge-rec"><span class="dot"></span>録画・面接中</span>
@@ -145,7 +136,6 @@
           <span style="font-size:11px;color:var(--muted);">話し終わったら自動的にAIが返答します</span>
         </div>
       </div>
-      <!-- 右: カメラ映像 -->
       <div style="background:#000;position:relative;">
         <video id="interviewVideo" autoplay playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 50%);pointer-events:none;"></div>
@@ -159,7 +149,6 @@
     </div>
   </section>
 
-  <!-- STEP 4: 送信中 -->
   <section id="step-processing" class="card" style="width:100%;max-width:420px;text-align:center;display:none;">
     <div class="spinner" style="margin:0 auto 20px;"></div>
     <h2 style="font-size:18px;font-weight:600;margin-bottom:8px;">データを送信中…</h2>
@@ -170,7 +159,6 @@
     <p id="progressLabel" style="font-size:11px;color:var(--muted);margin-top:8px;">準備中...</p>
   </section>
 
-  <!-- STEP 5: 完了 -->
   <section id="step-thanks" class="card" style="width:100%;max-width:420px;text-align:center;display:none;">
     <div style="width:64px;height:64px;border-radius:50%;background:rgba(34,211,160,0.1);border:2px solid rgba(34,211,160,0.3);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;">✓</div>
     <h2 style="font-size:22px;font-weight:600;margin-bottom:8px;">面接完了</h2>
@@ -182,10 +170,6 @@
 
 </main>
 
-<footer style="border-top:1px solid var(--border);padding:14px;text-align:center;font-size:11px;color:var(--muted);">
-  © 2026 AI Recruiting System
-</footer>
-
 <script>
 'use strict';
 
@@ -195,12 +179,10 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXjzslhel_0zpgXlJIi9pf_kNrR-eWDICY5gxpo4ev_wbhw8VH0_hJ5tR452LGCe-8/exec';
 // ══════════════════════════════════════════
 
-// GASから取得する設定値
+// アプリ状態
 let GEMINI_KEY  = '';
 let DRIVE_TOKEN = '';
 let FOLDER_ID   = '';
-
-// アプリ状態
 let mediaStream        = null;
 let mediaRecorder      = null;
 let recordedChunks     = [];
@@ -215,41 +197,40 @@ let speechRecognition  = null;
 let workletNode        = null;
 let micSourceNode      = null;
 
-// ─── ユーティリティ ───────────────────────────────────────────
 const $ = id => document.getElementById(id);
 
 function toast(msg, type, dur) {
   type = type || 'info';
-  dur  = dur  || 4000;
+  dur  = dur  || 5000;
   var el = $('toast');
   el.textContent = msg;
   el.className = 'show ' + type;
   clearTimeout(el._t);
-  el._t = setTimeout(function() { el.className = ''; }, dur);
+  el._t = setTimeout(() => { el.className = ''; }, dur);
 }
 
 function showStep(stepId) {
   ['step-entry','step-setup','step-interview','step-processing','step-thanks']
-    .forEach(function(id) { $(id).style.display = 'none'; });
+    .forEach(id => $(id).style.display = 'none');
   var el = $(stepId);
   el.style.display = (stepId === 'step-interview') ? 'block' : '';
   el.classList.remove('fade-in');
-  void el.offsetWidth; // reflow
+  void el.offsetWidth;
   el.classList.add('fade-in');
 }
 
-// ─── 起動: GASから設定値を取得 ────────────────────────────────
+// ─── 初期化処理 ───────────────────────────────────────────
 async function initApp() {
   try {
-    var res = await fetch(GAS_URL + '?action=token');
+    const res = await fetch(GAS_URL + '?action=token');
     if (!res.ok) throw new Error('GAS接続エラー (HTTP ' + res.status + ')');
 
-    var text = await res.text();
-    var data;
+    const text = await res.text();
+    let data;
     try {
       data = JSON.parse(text);
     } catch (e) {
-      throw new Error('GASレスポンス解析失敗。GASのデプロイURLを確認してください。');
+      throw new Error('設定データの解析に失敗しました。GASのURLを確認してください。');
     }
 
     if (data.status !== 'ok') throw new Error(data.message || '設定取得に失敗しました');
@@ -258,35 +239,35 @@ async function initApp() {
     DRIVE_TOKEN = data.driveToken   || '';
     FOLDER_ID   = data.folderId     || '';
 
-    if (!GEMINI_KEY) throw new Error('GASのスクリプトプロパティにGEMINI_API_KEYを設定してください');
+    if (!GEMINI_KEY) throw new Error('サーバー側にGemini APIキーが設定されていません');
 
     $('initOverlay').style.display = 'none';
     showStep('step-entry');
 
   } catch (err) {
-    $('initOverlay').innerHTML =
-      '<div style="text-align:center;padding:20px;max-width:360px;">' +
-      '<p style="font-size:32px;margin-bottom:12px;">❌</p>' +
-      '<p style="color:var(--danger);font-size:15px;font-weight:600;margin-bottom:8px;">初期化エラー</p>' +
-      '<p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:16px;">' + err.message + '</p>' +
-      '<button onclick="location.reload()" style="background:var(--accent);color:#050f0b;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;">再試行</button>' +
-      '</div>';
+    console.error('Init Error:', err);
+    $('initOverlay').innerHTML = `
+      <div style="text-align:center;padding:20px;max-width:360px;">
+        <p style="font-size:32px;margin-bottom:12px;">❌</p>
+        <p style="color:var(--danger);font-size:15px;font-weight:600;margin-bottom:8px;">初期化エラー</p>
+        <p style="color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:16px;">${err.message}</p>
+        <button onclick="location.reload()" style="background:var(--accent);color:#050f0b;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13px;font-weight:600;">再試行</button>
+      </div>`;
   }
 }
 
-// ─── STEP 1: バリデーション ───────────────────────────────────
+// ─── UIイベント ──────────────────────────────────────────────
 function validateEntry() {
-  var nameOk    = $('userName').value.trim().length > 0;
-  var emailOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('userEmail').value.trim());
-  var consentOk = $('consentCheck').checked;
+  const nameOk    = $('userName').value.trim().length > 0;
+  const emailOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('userEmail').value.trim());
+  const consentOk = $('consentCheck').checked;
   $('startSetupBtn').disabled = !(nameOk && emailOk && consentOk);
 }
-$('userName').addEventListener('input',    validateEntry);
-$('userEmail').addEventListener('input',   validateEntry);
+$('userName').addEventListener('input', validateEntry);
+$('userEmail').addEventListener('input', validateEntry);
 $('consentCheck').addEventListener('change', validateEntry);
 
-// ─── STEP 2: カメラ・マイク起動 ───────────────────────────────
-$('startSetupBtn').addEventListener('click', async function() {
+$('startSetupBtn').addEventListener('click', async () => {
   showStep('step-setup');
   $('mediaLoading').style.display = 'flex';
   $('startInterviewBtn').disabled = true;
@@ -299,26 +280,24 @@ $('startSetupBtn').addEventListener('click', async function() {
     $('previewVideo').srcObject = mediaStream;
     $('mediaLoading').style.display = 'none';
     $('startInterviewBtn').disabled = false;
-
   } catch (err) {
     console.error('[Media]', err);
-    $('mediaLoading').innerHTML =
-      '<div style="text-align:center;padding:20px;">' +
-      '<p style="font-size:28px;margin-bottom:10px;">⚠️</p>' +
-      '<p style="color:var(--danger);font-weight:500;margin-bottom:6px;">カメラ/マイクにアクセスできません</p>' +
-      '<p style="font-size:12px;color:var(--muted);">ブラウザのアドレスバー左のアイコンから許可してください。</p>' +
-      '</div>';
+    $('mediaLoading').innerHTML = `
+      <div style="text-align:center;padding:20px;">
+        <p style="font-size:28px;margin-bottom:10px;">⚠️</p>
+        <p style="color:var(--danger);font-weight:500;margin-bottom:6px;">カメラ/マイクにアクセスできません</p>
+        <p style="font-size:12px;color:var(--muted);">ブラウザの設定から許可してください。</p>
+      </div>`;
   }
 });
 
-$('backToEntryBtn').addEventListener('click', function() {
-  if (mediaStream) { mediaStream.getTracks().forEach(function(t) { t.stop(); }); mediaStream = null; }
+$('backToEntryBtn').addEventListener('click', () => {
+  if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
   $('previewVideo').srcObject = null;
   showStep('step-entry');
 });
 
-// ─── STEP 3: 面接開始 ─────────────────────────────────────────
-$('startInterviewBtn').addEventListener('click', async function() {
+$('startInterviewBtn').addEventListener('click', async () => {
   showStep('step-interview');
   $('step-interview').style.display = 'grid';
   $('interviewVideo').srcObject = mediaStream;
@@ -332,64 +311,55 @@ $('startInterviewBtn').addEventListener('click', async function() {
   await initiateWebSocket();
 });
 
-// ─── 録画 ────────────────────────────────────────────────────
+// ─── 面接ロジック ──────────────────────────────────────────
 function startRecording() {
   recordedChunks = [];
-  var mimeTypes = ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm', 'video/mp4'];
-  var mime = '';
-  for (var i = 0; i < mimeTypes.length; i++) {
-    if (MediaRecorder.isTypeSupported(mimeTypes[i])) { mime = mimeTypes[i]; break; }
-  }
+  const mimeTypes = ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm', 'video/mp4'];
+  let mime = '';
+  for (let m of mimeTypes) { if (MediaRecorder.isTypeSupported(m)) { mime = m; break; } }
   try {
-    mediaRecorder = new MediaRecorder(mediaStream,
-      mime ? { mimeType: mime, videoBitsPerSecond: 200000, audioBitsPerSecond: 32000 } : {});
+    mediaRecorder = new MediaRecorder(mediaStream, mime ? { mimeType: mime, videoBitsPerSecond: 200000, audioBitsPerSecond: 32000 } : {});
   } catch (e) {
     mediaRecorder = new MediaRecorder(mediaStream);
   }
-  mediaRecorder.ondataavailable = function(e) {
-    if (e.data && e.data.size > 0) recordedChunks.push(e.data);
-  };
+  mediaRecorder.ondataavailable = e => { if (e.data && e.data.size > 0) recordedChunks.push(e.data); };
   mediaRecorder.start(1000);
 }
 
-// ─── タイマー ─────────────────────────────────────────────────
 function updateTimer() {
-  var s = Math.floor((Date.now() - interviewStartTime) / 1000);
-  $('interviewTimer').textContent =
-    String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  const s = Math.floor((Date.now() - interviewStartTime) / 1000);
+  $('interviewTimer').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
   if (s >= 300 && isInterviewActive) {
     toast('面接時間の上限（5分）に達しました');
     completeInterview();
   }
 }
 
-// ─── Web Speech API（ユーザー発話取得） ───────────────────────
 function setupSpeechRecognition() {
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return;
   speechRecognition = new SR();
   speechRecognition.lang = 'ja-JP';
   speechRecognition.continuous = true;
   speechRecognition.interimResults = false;
-  speechRecognition.onresult = function(e) {
-    for (var i = e.resultIndex; i < e.results.length; i++) {
+  speechRecognition.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
       if (e.results[i].isFinal) {
-        var t = e.results[i][0].transcript.trim();
+        const t = e.results[i][0].transcript.trim();
         if (t) conversationLog.push('応募者: ' + t);
       }
     }
   };
-  speechRecognition.onerror = function(e) { console.warn('[SR]', e.error); };
-  speechRecognition.onend   = function() { if (isInterviewActive) speechRecognition.start(); };
+  speechRecognition.onend = () => { if (isInterviewActive) speechRecognition.start(); };
   speechRecognition.start();
 }
 
-// ─── Gemini Live API (WebSocket) ───────────────────────────────
 async function initiateWebSocket() {
-  var wsUrl = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=' + GEMINI_KEY;
+  // v1alphaへ変更 (BidiGenerateContent用)
+  const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${GEMINI_KEY}`;
   webSocket = new WebSocket(wsUrl);
 
-  webSocket.onopen = function() {
+  webSocket.onopen = () => {
     $('aiStatusText').textContent = '面接官がオンラインになりました';
     webSocket.send(JSON.stringify({
       setup: {
@@ -398,28 +368,19 @@ async function initiateWebSocket() {
           responseModalities: ['AUDIO', 'TEXT'],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Aoede' } } },
         },
-        systemInstruction: { parts: [{ text:
-          'あなたは会社のAI選考官です。優しく、聞き取りやすく、ハキハキとした口調で話してください。' +
-          '以下の情報を1つずつ会話を通じて自然に引き出してください：' +
-          '①現在の状況（学生・主婦・会社員など）、②応募理由、③子供や教育に関わった経験、' +
-          '④勤務条件（場所・曜日・シフト希望）。' +
-          '一問一答にならず、自然な相槌を入れながら進めてください。' +
-          '全項目が終わるか5分経過したら「面接は以上です。お時間をいただきありがとうございました。」と伝えて終了してください。'
-        }] },
+        systemInstruction: { parts: [{ text: 'あなたは会社のAI選考官です。優しく、聞き取りやすく、ハキハキとした口調で話してください。以下の情報を1つずつ引き出してください：①現在の状況、②応募理由、③子供や教育に関わった経験、④勤務条件（場所・曜日・シフト希望）。5分経過したら面接を終了してください。' }] },
       },
     }));
     setupMicWorklet();
   };
 
-  webSocket.onmessage = async function(e) {
-    var text = (e.data instanceof Blob) ? await e.data.text() : e.data;
-    var r;
-    try { r = JSON.parse(text); } catch (ex) { return; }
-    var parts = r.serverContent && r.serverContent.modelTurn && r.serverContent.modelTurn.parts;
+  webSocket.onmessage = async (e) => {
+    const text = (e.data instanceof Blob) ? await e.data.text() : e.data;
+    let r; try { r = JSON.parse(text); } catch (ex) { return; }
+    const parts = r.serverContent && r.serverContent.modelTurn && r.serverContent.modelTurn.parts;
     if (!parts) return;
-    for (var i = 0; i < parts.length; i++) {
-      var p = parts[i];
-      if (p.inlineData && p.inlineData.mimeType && p.inlineData.mimeType.indexOf('audio/pcm') === 0) {
+    for (let p of parts) {
+      if (p.inlineData && p.inlineData.mimeType && p.inlineData.mimeType.startsWith('audio/pcm')) {
         playPCM(atob(p.inlineData.data));
       }
       if (p.text && p.text.trim()) {
@@ -429,106 +390,81 @@ async function initiateWebSocket() {
     }
   };
 
-  webSocket.onclose = function() {
-    if (isInterviewActive) completeInterview();
-  };
-
-  webSocket.onerror = function() {
+  webSocket.onclose = () => { if (isInterviewActive) completeInterview(); };
+  webSocket.onerror = () => {
     $('aiStatusText').textContent = '接続エラーが発生しました';
-    toast('WebSocket接続エラー。しばらく待ってから再試行してください。', 'error', 6000);
+    toast('音声認識の接続に失敗しました。', 'error');
   };
 }
 
-// ─── AudioWorklet: マイク音声を16kHzで送信 ────────────────────
 async function setupMicWorklet() {
   try {
-    if (!sharedAudioCtx) {
-      sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
-    }
-    var micCtx = new AudioContext({ sampleRate: 16000 });
-
-    var workletCode =
-      'class P extends AudioWorkletProcessor {' +
-      '  constructor(){super();this._b=[];}' +
-      '  process(inputs){' +
-      '    var ch=inputs[0]&&inputs[0][0];if(!ch)return true;' +
-      '    for(var i=0;i<ch.length;i++)this._b.push(ch[i]);' +
-      '    while(this._b.length>=4096){' +
-      '      var c=this._b.splice(0,4096);' +
-      '      var buf=new Int16Array(4096);' +
-      '      for(var j=0;j<4096;j++){var s=Math.max(-1,Math.min(1,c[j]));buf[j]=s<0?s*0x8000:s*0x7FFF;}' +
-      '      this.port.postMessage(buf.buffer,[buf.buffer]);' +
-      '    }' +
-      '    return true;' +
-      '  }' +
-      '}' +
-      'registerProcessor("mic-p",P);';
-
-    var blobUrl = URL.createObjectURL(new Blob([workletCode], { type: 'application/javascript' }));
+    if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+    const micCtx = new AudioContext({ sampleRate: 16000 });
+    const workletCode = `
+      class P extends AudioWorkletProcessor {
+        constructor(){super();this._b=[];}
+        process(inputs){
+          var ch=inputs[0]&&inputs[0][0];if(!ch)return true;
+          for(var i=0;i<ch.length;i++)this._b.push(ch[i]);
+          while(this._b.length>=4096){
+            var c=this._b.splice(0,4096);
+            var buf=new Int16Array(4096);
+            for(var j=0;j<4096;j++){var s=Math.max(-1,Math.min(1,c[j]));buf[j]=s<0?s*0x8000:s*0x7FFF;}
+            this.port.postMessage(buf.buffer,[buf.buffer]);
+          }
+          return true;
+        }
+      }
+      registerProcessor("mic-p",P);`;
+    const blobUrl = URL.createObjectURL(new Blob([workletCode], { type: 'application/javascript' }));
     await micCtx.audioWorklet.addModule(blobUrl);
     URL.revokeObjectURL(blobUrl);
 
     micSourceNode = micCtx.createMediaStreamSource(mediaStream);
     workletNode   = new AudioWorkletNode(micCtx, 'mic-p');
 
-    workletNode.port.onmessage = function(e) {
-      if (!isInterviewActive) return;
-      if (!webSocket || webSocket.readyState !== WebSocket.OPEN) return;
-      webSocket.send(JSON.stringify({
-        realtimeInput: {
-          mediaChunks: [{ mimeType: 'audio/pcm;rate=16000', data: toBase64(e.data) }],
-        },
-      }));
+    workletNode.port.onmessage = (e) => {
+      if (!isInterviewActive || !webSocket || webSocket.readyState !== WebSocket.OPEN) return;
+      webSocket.send(JSON.stringify({ realtimeInput: { mediaChunks: [{ mimeType: 'audio/pcm;rate=16000', data: toBase64(e.data) }] } }));
     };
-
     micSourceNode.connect(workletNode);
-
   } catch (err) {
     console.error('[Worklet]', err);
-    toast('マイク音声処理のセットアップに失敗しました。', 'error');
+    toast('マイクの初期化に失敗しました', 'error');
   }
 }
 
-// ─── PCM音声再生（Gemini出力: 24kHz/Mono/16bit） ─────────────
 function playPCM(raw) {
-  if (!sharedAudioCtx) {
-    sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
-  }
+  if (!sharedAudioCtx) sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
   if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
 
-  var i16 = new Int16Array(new ArrayBuffer(raw.length));
-  for (var i = 0; i < raw.length / 2; i++) {
-    i16[i] = (raw.charCodeAt(i * 2) & 0xff) | ((raw.charCodeAt(i * 2 + 1) & 0xff) << 8);
-  }
-  var f32 = new Float32Array(i16.length);
-  for (var j = 0; j < i16.length; j++) {
-    f32[j] = i16[j] < 0 ? i16[j] / 0x8000 : i16[j] / 0x7FFF;
-  }
+  const i16 = new Int16Array(new ArrayBuffer(raw.length));
+  for (let i = 0; i < raw.length / 2; i++) i16[i] = (raw.charCodeAt(i * 2) & 0xff) | ((raw.charCodeAt(i * 2 + 1) & 0xff) << 8);
+  const f32 = new Float32Array(i16.length);
+  for (let j = 0; j < i16.length; j++) f32[j] = i16[j] < 0 ? i16[j] / 0x8000 : i16[j] / 0x7FFF;
 
-  var buf = sharedAudioCtx.createBuffer(1, f32.length, 24000);
+  const buf = sharedAudioCtx.createBuffer(1, f32.length, 24000);
   buf.getChannelData(0).set(f32);
-
-  var src = sharedAudioCtx.createBufferSource();
+  const src = sharedAudioCtx.createBufferSource();
   src.buffer = buf;
   src.connect(sharedAudioCtx.destination);
 
-  var now = sharedAudioCtx.currentTime;
-  var startAt = now;
-  // 古いエントリをクリーンアップ
-  audioQueue = audioQueue.filter(function(x) { return x.endAt > now - 1; });
+  const now = sharedAudioCtx.currentTime;
+  let startAt = now;
+  audioQueue = audioQueue.filter(x => x.endAt > now - 1);
   if (audioQueue.length > 0) {
-    var last = audioQueue[audioQueue.length - 1];
+    const last = audioQueue[audioQueue.length - 1];
     if (last.endAt > now) startAt = last.endAt;
   }
-  var endAt = startAt + buf.duration;
-  audioQueue.push({ src: src, endAt: endAt });
+  audioQueue.push({ src, endAt: startAt + buf.duration });
   src.start(startAt);
 
   $('aiStatusText').textContent = 'AI面接官が質問中…';
   $('soundWave').classList.add('wave-active');
 
-  src.onended = function() {
-    audioQueue = audioQueue.filter(function(x) { return x.src !== src; });
+  src.onended = () => {
+    audioQueue = audioQueue.filter(x => x.src !== src);
     if (audioQueue.length === 0) {
       $('aiStatusText').textContent = 'あなたの回答をお聞きしています…';
       $('soundWave').classList.remove('wave-active');
@@ -536,164 +472,142 @@ function playPCM(raw) {
   };
 }
 
-// ─── ArrayBuffer → Base64 ────────────────────────────────────
 function toBase64(buffer) {
-  var bytes = new Uint8Array(buffer);
-  var binary = '';
-  for (var i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
   return btoa(binary);
 }
 
-// ─── 面接終了 ─────────────────────────────────────────────────
-$('endInterviewBtn').addEventListener('click', function() {
+// ─── 終了・データ送信処理 ────────────────────────────────────
+$('endInterviewBtn').addEventListener('click', () => {
   if (confirm('面接を終了して回答を送信しますか？')) completeInterview();
 });
 
 async function completeInterview() {
   if (!isInterviewActive) return;
   isInterviewActive = false;
-
   clearInterval(timerInterval);
 
-  if (speechRecognition) {
-    try { speechRecognition.onend = null; speechRecognition.stop(); } catch (e) {}
-  }
-  if (webSocket && webSocket.readyState === WebSocket.OPEN) webSocket.close();
-  if (workletNode)   { try { workletNode.disconnect();   } catch (e) {} }
-  if (micSourceNode) { try { micSourceNode.disconnect(); } catch (e) {} }
-  if (sharedAudioCtx) {
-    try { await sharedAudioCtx.close(); } catch (e) {}
-    sharedAudioCtx = null;
-  }
+  if (speechRecognition) try { speechRecognition.stop(); } catch (e) {}
+  if (webSocket) webSocket.close();
+  if (workletNode) try { workletNode.disconnect(); } catch (e) {}
+  if (micSourceNode) try { micSourceNode.disconnect(); } catch (e) {}
+  if (sharedAudioCtx) { try { await sharedAudioCtx.close(); sharedAudioCtx = null; } catch (e) {} }
 
   showStep('step-processing');
 
-  // mediaRecorder.stop()の完了（onstop）を確実に待ってからBlob化
-  await new Promise(function(resolve) {
-    if (!mediaRecorder || mediaRecorder.state === 'inactive') { resolve(); return; }
+  await new Promise(resolve => {
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') return resolve();
     mediaRecorder.onstop = resolve;
     mediaRecorder.stop();
   });
-
-  if (mediaStream) mediaStream.getTracks().forEach(function(t) { t.stop(); });
+  if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
 
   await submitData();
 }
 
-// ─── データ送信 ───────────────────────────────────────────────
 async function submitData() {
-  var name     = $('userName').value.trim();
-  var email    = $('userEmail').value.trim();
-  var duration = Math.floor((Date.now() - interviewStartTime) / 1000);
-  var prog     = $('uploadProgress');
-  var lbl      = $('progressLabel');
+  const name     = $('userName').value.trim();
+  const email    = $('userEmail').value.trim();
+  const duration = Math.floor((Date.now() - interviewStartTime) / 1000);
+  const prog     = $('uploadProgress');
+  const lbl      = $('progressLabel');
 
-  var mime      = (recordedChunks[0] && recordedChunks[0].type) || 'video/webm';
-  var videoBlob = new Blob(recordedChunks, { type: mime });
-  var ext       = mime.indexOf('mp4') !== -1 ? 'mp4' : 'webm';
-  var fileName  = Date.now() + '_' + name.replace(/\s/g, '_') + '_interview.' + ext;
+  const mime = (recordedChunks[0] && recordedChunks[0].type) || 'video/webm';
+  const videoBlob = new Blob(recordedChunks, { type: mime });
+  const fileName = `${Date.now()}_${name.replace(/\s/g, '_')}_interview.${mime.includes('mp4') ? 'mp4' : 'webm'}`;
 
-  // Step1: 動画をDriveにアップロード
   prog.style.width = '20%';
-  lbl.textContent  = '動画をDriveにアップロード中...';
+  lbl.textContent  = '動画をDriveに保存中...';
 
-  var videoUrl = '（動画なし）';
+  let videoUrl = '（動画なし）';
   if (DRIVE_TOKEN && videoBlob.size > 0) {
     try {
       videoUrl = await uploadToDrive(videoBlob, fileName, DRIVE_TOKEN, FOLDER_ID);
       prog.style.width = '60%';
     } catch (err) {
-      console.error('[Drive]', err);
-      toast('動画アップロード失敗（ログは送信されます）', 'error');
-      prog.style.width = '60%';
+      console.error('[Drive Upload Error]', err);
+      toast('動画アップロードに失敗しました（ログは送信されます）', 'error');
     }
-  } else {
-    prog.style.width = '60%';
   }
 
-  // Step2: チャットログをGASに送信
-  // URLSearchParams（form-urlencoded）を使うことでCORSプリフライトを回避
-  // no-corsモードで送信するためレスポンスは読めないが、GASは確実に受信・記録する
-  lbl.textContent  = 'AI評価を生成中...';
   prog.style.width = '80%';
+  lbl.textContent  = 'AI評価を生成し、データを記録中...';
+
+  // ★修正ポイント: text/plain で JSON 文字列を送ることで、CORSを回避しつつエラーを読み取る
+  const payloadStr = JSON.stringify({
+    name: name,
+    email: email,
+    chatLog: conversationLog.join('\n'),
+    videoUrl: videoUrl,
+    duration: duration
+  });
 
   try {
-    var formData = new URLSearchParams();
-    formData.append('name',     name);
-    formData.append('email',    email);
-    formData.append('chatLog',  conversationLog.join('\n'));
-    formData.append('videoUrl', videoUrl);
-    formData.append('duration', String(duration));
-
-    await fetch(GAS_URL, {
+    const res = await fetch(GAS_URL, {
       method: 'POST',
-      mode:   'no-cors',   // GASはOPTIONSプリフライトに非対応のため必須
-      body:   formData,
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: payloadStr
     });
 
-    // no-corsではレスポンスを読めないが、GASは受信してスプレッドシートに記録・メール通知する
+    const responseText = await res.text();
+    let resultData;
+
+    try {
+      resultData = JSON.parse(responseText);
+    } catch (parseErr) {
+      console.error('[GAS Raw Response]', responseText);
+      throw new Error(`サーバーからの応答が不正です。GASのエラーログシートを確認してください。\n応答内容: ${responseText.slice(0, 50)}...`);
+    }
+
+    if (resultData.status !== 'success') {
+      throw new Error(resultData.message || 'サーバー側で不明なエラーが発生しました');
+    }
+
     prog.style.width = '100%';
     lbl.textContent  = '送信完了！';
-    setTimeout(function() { showStep('step-thanks'); }, 600);
+    setTimeout(() => showStep('step-thanks'), 600);
 
   } catch (err) {
-    console.error('[GAS]', err);
-    toast('送信エラー: ' + err.message, 'error', 8000);
-    showStep('step-entry');
+    console.error('[Submit Error]', err);
+    toast('エラーが発生しました: ' + err.message, 'error', 10000);
+    lbl.textContent = '送信に失敗しました';
+    prog.style.background = 'var(--danger)';
   }
 }
 
-// ─── Google Drive Resumable Upload ───────────────────────────
 async function uploadToDrive(blob, fileName, token, folderId) {
-  var metadata = { name: fileName, mimeType: blob.type };
+  const metadata = { name: fileName, mimeType: blob.type };
   if (folderId) metadata.parents = [folderId];
 
-  // Step1: セッション開始
-  var initRes = await fetch(
-    'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,webViewLink',
-    {
-      method:  'POST',
-      headers: {
-        'Authorization':          'Bearer ' + token,
-        'Content-Type':           'application/json; charset=UTF-8',
-        'X-Upload-Content-Type':  blob.type,
-        'X-Upload-Content-Length': String(blob.size),
-      },
-      body: JSON.stringify(metadata),
-    }
-  );
-  if (!initRes.ok) throw new Error('Drive初期化エラー (HTTP ' + initRes.status + ')');
-
-  var uploadUrl = initRes.headers.get('Location');
-  if (!uploadUrl) throw new Error('DriveアップロードURLの取得に失敗しました');
-
-  // Step2: データ送信
-  var upRes = await fetch(uploadUrl, {
-    method:  'PUT',
-    headers: { 'Content-Type': blob.type },
-    body:    blob,
+  const initRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&fields=id,webViewLink', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json; charset=UTF-8',
+      'X-Upload-Content-Type': blob.type,
+      'X-Upload-Content-Length': String(blob.size),
+    },
+    body: JSON.stringify(metadata),
   });
-  if (!upRes.ok && upRes.status !== 200 && upRes.status !== 201) {
-    throw new Error('Driveアップロードエラー (HTTP ' + upRes.status + ')');
-  }
+  if (!initRes.ok) throw new Error('Drive init error');
 
-  var fileData = await upRes.json();
+  const uploadUrl = initRes.headers.get('Location');
+  const upRes = await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': blob.type }, body: blob });
+  if (!upRes.ok && upRes.status !== 200 && upRes.status !== 201) throw new Error('Drive upload error');
 
-  // Step3: 共有設定（リンクを知っている全員が閲覧可）
+  const fileData = await upRes.json();
   if (fileData.id) {
-    await fetch('https://www.googleapis.com/drive/v3/files/' + fileData.id + '/permissions', {
-      method:  'POST',
+    await fetch(`https://www.googleapis.com/drive/v3/files/${fileData.id}/permissions`, {
+      method: 'POST',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ role: 'reader', type: 'anyone' }),
-    }).catch(function(e) { console.warn('[Drive permissions]', e); }); // 共有失敗は致命的でない
+      body: JSON.stringify({ role: 'reader', type: 'anyone' }),
+    }).catch(e => console.warn('[Drive Auth]', e));
   }
-
-  return fileData.webViewLink || ('https://drive.google.com/file/d/' + fileData.id + '/view');
+  return fileData.webViewLink || (`https://drive.google.com/file/d/${fileData.id}/view`);
 }
 
-// ─── アプリ起動 ───────────────────────────────────────────────
 initApp();
 </script>
 </body>
