@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* CSSは元のままなので省略せず記述します */
     :root { --bg:#0a0b0f; --surface:#11131a; --surface2:#181b25; --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12); --text:#e8e9ed; --muted:#6b7080; --accent:#22d3a0; --danger:#f04646; }
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.6; min-height:100vh; }
@@ -127,7 +126,7 @@
             <span class="wave-bar" style="width:4px;height:4px;border-radius:2px;background:var(--accent);"></span>
           </div>
           <div style="text-align:center;">
-            <p id="aiStatusText" style="font-size:13px;font-weight:500;color:var(--accent);margin-bottom:6px;">接続中…</p>
+            <p id="aiStatusText" style="font-size:13px;font-weight:500;color:var(--accent);margin-bottom:6px;">AIサーバーと接続中…</p>
             <div id="subtitlesText">接続が確立されると面接が始まります。</div>
           </div>
         </div>
@@ -201,7 +200,7 @@ const $ = id => document.getElementById(id);
 
 function toast(msg, type, dur) {
   type = type || 'info';
-  dur  = dur  || 5000;
+  dur  = dur  || 6000;
   var el = $('toast');
   el.textContent = msg;
   el.className = 'show ' + type;
@@ -274,7 +273,7 @@ $('startSetupBtn').addEventListener('click', async () => {
 
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { ideal: 15 } },
+      video: { width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 10 } },
       audio: { echoCancellation: true, noiseSuppression: true },
     });
     $('previewVideo').srcObject = mediaStream;
@@ -318,7 +317,7 @@ function startRecording() {
   let mime = '';
   for (let m of mimeTypes) { if (MediaRecorder.isTypeSupported(m)) { mime = m; break; } }
   try {
-    mediaRecorder = new MediaRecorder(mediaStream, mime ? { mimeType: mime, videoBitsPerSecond: 200000, audioBitsPerSecond: 32000 } : {});
+    mediaRecorder = new MediaRecorder(mediaStream, mime ? { mimeType: mime, videoBitsPerSecond: 100000, audioBitsPerSecond: 32000 } : {});
   } catch (e) {
     mediaRecorder = new MediaRecorder(mediaStream);
   }
@@ -355,12 +354,13 @@ function setupSpeechRecognition() {
 }
 
 async function initiateWebSocket() {
-  // v1alphaへ変更 (BidiGenerateContent用)
   const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${GEMINI_KEY}`;
   webSocket = new WebSocket(wsUrl);
 
   webSocket.onopen = () => {
-    $('aiStatusText').textContent = '面接官がオンラインになりました';
+    $('aiStatusText').textContent = 'AIサーバーの準備中…';
+    
+    // まだマイク音声は送らず、設定情報だけを送信する
     webSocket.send(JSON.stringify({
       setup: {
         model: 'models/gemini-2.0-flash-exp',
@@ -371,12 +371,27 @@ async function initiateWebSocket() {
         systemInstruction: { parts: [{ text: 'あなたは会社のAI選考官です。優しく、聞き取りやすく、ハキハキとした口調で話してください。以下の情報を1つずつ引き出してください：①現在の状況、②応募理由、③子供や教育に関わった経験、④勤務条件（場所・曜日・シフト希望）。5分経過したら面接を終了してください。' }] },
       },
     }));
-    setupMicWorklet();
   };
 
   webSocket.onmessage = async (e) => {
     const text = (e.data instanceof Blob) ? await e.data.text() : e.data;
     let r; try { r = JSON.parse(text); } catch (ex) { return; }
+
+    // エラーが返ってきた場合
+    if (r.error) {
+      console.error('[Gemini API Error]', r.error);
+      toast('AIサーバーエラー: ' + r.error.message, 'error', 10000);
+      return;
+    }
+
+    // ★重要: サーバー側で準備が完了したタイミングで初めてマイクを繋ぐ
+    if (r.setupComplete) {
+      console.log('[Gemini] Setup Complete');
+      $('aiStatusText').textContent = '面接官がオンラインになりました';
+      setupMicWorklet();
+      return;
+    }
+
     const parts = r.serverContent && r.serverContent.modelTurn && r.serverContent.modelTurn.parts;
     if (!parts) return;
     for (let p of parts) {
@@ -390,10 +405,21 @@ async function initiateWebSocket() {
     }
   };
 
-  webSocket.onclose = () => { if (isInterviewActive) completeInterview(); };
-  webSocket.onerror = () => {
+  webSocket.onclose = (event) => {
+    console.log('[WebSocket Closed] Code:', event.code, 'Reason:', event.reason);
+    if (isInterviewActive) {
+      // 正常終了以外の場合はエラー通知を出す
+      if (event.code !== 1000 && event.code !== 1005) {
+        toast(`AIとの通信が切断されました (エラーコード: ${event.code})`, 'error');
+      }
+      completeInterview();
+    }
+  };
+
+  webSocket.onerror = (err) => {
+    console.error('[WebSocket Error]', err);
     $('aiStatusText').textContent = '接続エラーが発生しました';
-    toast('音声認識の接続に失敗しました。', 'error');
+    toast('通信エラー。APIキーやネットワークを確認してください。', 'error', 8000);
   };
 }
 
@@ -535,7 +561,6 @@ async function submitData() {
   prog.style.width = '80%';
   lbl.textContent  = 'AI評価を生成し、データを記録中...';
 
-  // ★修正ポイント: text/plain で JSON 文字列を送ることで、CORSを回避しつつエラーを読み取る
   const payloadStr = JSON.stringify({
     name: name,
     email: email,
